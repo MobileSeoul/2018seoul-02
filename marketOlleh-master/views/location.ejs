@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    <script src='/cordova/cordova.js'></script>
+    <script src='/cordova/cordova_plugins.js'></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/spin.js/2.3.2/spin.min.js"></script>
+    <script src="/javascripts/spin.js"></script>
+    <link rel="stylesheet" href="/stylesheets/swiper.min.css">
+    <link rel="stylesheet" type="text/css" href="/stylesheets/location.css" />
+    <!-- <script type='application/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.js'></script> -->
+    <!-- <script>
+  window.addEventListener('load', function () {
+    FastClick.attach(document.body);
+  }, false);
+  </script> -->
+</head>
+
+<script>
+  document.addEventListener("backbutton", onBackKeyDown, false);
+  function onBackKeyDown(e) {
+    e.preventDefault();
+    $('.alert_select').css('display', 'block');
+    $('.alert_content_select').html('앱을 종료하시겠습니까?')
+    $('.alert_select_ok').click(function () {
+     navigator.app.exitApp();
+    });
+  }
+</script>
+<!-- kakao map API (hw edit) -->
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=1f14a7f1512988347e7ffdd75ac7ab4c"></script>
+<body>
+  <!-- kakao map -->
+  <input type="button" id="getMyLo" name=""style="background-image:url('/images/placeholder.png'); background-position:center center; background-size:20px 20px; background-repeat:no-repeat";>
+
+
+  <div id="map" style="width:100%; height:92%;"></div>
+  <div class="alert_gps"  style="display:none">
+        <div class="alert_o_content">
+          <div class="alert_content_select_gps">
+          </div>
+          <div class="alert_select_cancel_gps">
+            취소
+          </div>
+          <div class="alert_select_ok_gps">
+              재시도
+            </div>
+        </div>
+      </div>
+  <div class="alert_select"  style="display:none">
+    <div class="alert_o_content">
+      <div class="alert_content_select"><!--INNER TEXT VALUE --></div>
+      <div class="alert_select_cancel">취소</div>
+      <div class="alert_select_ok">확인</div>
+    </div>
+  </div>
+  <div class="alert_o" style="display:none">
+    <div class="alert_o_content">
+      <div class="alert_image">
+        <img src="/images/alert_o.png" width="70px" height="70px" >
+      </div>
+      <div class="alert_content">
+      </div>
+    </div>
+  </div>
+
+  <!-- HW EDIT 코르도바 + 자바스크립트 + 태그제어 -->
+  <script src="/javascripts/cordova_getgps.js"></script>
+  <!-- ▼ hw edit; map javascirpt -->
+  <script type="text/javascript">
+
+    // 마커 저장 배열
+    var markers = [];
+    var infowindow = [];
+
+    // parseFloat(myLat), parseFloat(myLng)
+    // 지도를 표시할 div (id)
+    var mapContainer = document.getElementById('map'),
+        mapOption = {
+            center: new daum.maps.LatLng(37.56300372568073, 126.97729513156993), // 지도의 중심좌표
+            level: 2 // 지도의 확대 레벨
+        };
+
+    var map = new daum.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+
+    /* ─────────────▽▽▽마커의 특정 이미지 사용 위한 API▽▽▽───────────── */
+    // 내 위치 표시해주는 마커 특수 IMG
+    var markerImageSrc = '/images/location2.png';
+
+    // 마커이미지의 주소와, 크기, 옵션으로 마커 이미지를 생성하여 리턴하는 함수입니다
+    function createMarkerImage(src, size, options) {
+        var markerImage = new daum.maps.MarkerImage(src, size, options);
+        return markerImage;
+    }
+
+    // 좌표와 마커이미지를 받아 마커를 생성하여 리턴하는 함수입니다
+    function createMarker(position, image) {
+        var marker = new daum.maps.Marker({
+            position: position,
+            image: image
+        });
+
+        return marker;
+    }
+    // createMyMarkers() 함수 필수 참조
+    // 내 이미지 마커를 생성하고 마커 배열에 추가하는 함수입니다
+    function createMyMarkers() {
+
+        var imageSize = new daum.maps.Size(32, 33),
+            imageOptions = { offset: new daum.maps.Point(3, 6) };
+
+        var myLatLng = new daum.maps.LatLng(parseFloat(myLat), parseFloat(myLng));
+        // 마커이미지와 마커를 생성합니다
+        var markerImage = createMarkerImage(markerImageSrc, imageSize, imageOptions),
+            marker = createMarker(myLatLng, markerImage);
+
+        marker.setMap(map);
+        // 생성된 마커를 마커 배열에 추가합니다
+        markers.push(marker);
+    }
+
+    function relayout() {
+        map.relayout();
+    }
+
+    function changeCenter(moveLatLon) {
+
+        relayout();
+        // 지도 중심을 이동 시킵니다
+        map.setCenter(moveLatLon);
+        map.setLevel(2);
+      } // changeCenter
+
+    /* ─────────────△△△마커의 특정 이미지 사용 위한 API△△△───────────── */
+
+    function FUXKING_GPS() {
+      hideMarkers();
+      window.seoulApp.getGPS();
+    }
+
+    // 배열에 추가된 마커들을 지도에 표시하거나 삭제하는 함수입니다
+    function setMarkers(map) {
+        for (var i = 0; i < markers.length; i++) {
+            markers[i].setMap(map);
+        }            
+    }
+
+    // 배열에 추가된 마커를 지도에서 삭제하는 함수입니다
+    function hideMarkers() {
+        setMarkers(null);    
+    }    
+
+    function getMyLocation(lng,lat){
+      window.myLat = lat;
+      window.myLng = lng;
+      $('#getMyLo').off();
+      getMap();
+    }
+
+    function gpsGetFail() {
+        console.log("못받아옴");
+        // alert("Can't get GPS!");
+        $('.alert_gps').css('display', 'block');
+        $('.alert_content_select_gps').html(
+            'GPS 인식에 실패하였습니다. GPS를 켜고 만약 건물내부 일시 위치 설정을 높은 정확도로 변경해주세요'
+        );
+        // $('#gps_label').css('line-height','8px')
+        $('.alert_select_ok_gps').click(function () {
+            window.location.reload();
+            // window.seoulApp.SignUpgetGPS();
+            gpsNULL();
+        });
+    } // gpsGetFail()
+
+    function gpsNULL(){
+        $('.alert_o').css('display', 'block');
+        $('.alert_content_select').html("위치권한이 필요합니다");
+        window.seoulApp.getGPS();
+        window.seoulApp.getGPSPermission();
+        if (!isGPSPermission) { // false
+            // window.seoulApp.reload();
+            gpsNULL();
+        } else { // true
+            window.seoulApp.getGPS();
+        }
+    }
+
+    function getPermission(isGPSPermission) {
+      window.isGPSPermission = isGPSPermission;
+    }
+
+    // GPS 값이 콜백이라는 점을 감한해 함수로 감았다
+    function getMap() {
+
+        // document.getElementById('map') 차일드 노드 여부로 map의 중복 생성, 겹침을 해결하였다.
+        // if (document.getElementById('map').hasChildNodes()) {
+        //     document.getElementById('map').innerHTML = null;
+        // }
+
+        createMyMarkers(); // marker img
+        changeCenter(new daum.maps.LatLng(myLat, myLng))
+        getNearMarket();
+        relayout();
+    } // end ~ getMap()
+
+    function addMarker(position, arr) {
+        // 마커를 생성합니다
+        var marker = new daum.maps.Marker({
+            position: position,
+            clickable: true // 마커를 클릭했을 때 지도의 클릭 이벤트가 발생하지 않도록 설정합니다
+        });
+        // 마커가 지도 위에 표시되도록 설정합니다
+        marker.setMap(map);
+
+        // 마커를 클릭했을 때 마커 위에 표시할 인포윈도우를 생성합니다
+        // 인포윈도우 내용, HTML 문자열이나 document element가 가능합니다
+        var iwContent = '<div style="padding:5px;"><h3>'+arr.market_name+'</h3><span>'+arr.sijang_name+'</span></div>',
+            iwRemoveable = true; // removeable 속성을 ture 로 설정하면 인포윈도우를 닫을 수 있는 x버튼이 표시됩니다
+        // 인포윈도우를 생성합니다
+        var infowindowTemp = new daum.maps.InfoWindow({
+            content : iwContent,
+            removable : iwRemoveable
+        });
+
+        // 마커에 클릭이벤트를 등록합니다
+        daum.maps.event.addListener(marker, 'click', function() {
+              // 마커 위에 인포윈도우를 표시합니다
+              infowindowTemp.open(map, marker);
+        });
+
+        infowindow.push(infowindowTemp);
+        // 생성된 마커를 배열에 추가합니다
+        markers.push(marker);
+    } // addMarket
+
+    // 인포윈도우를 표시하는 클로저를 만드는 함수입니다
+    function makeOverListener(map, markerInfo, infowindow) {
+        return function() {
+            infowindow.open(map, markerInfo);
+        };
+    }
+
+    // 인포윈도우를 닫는 클로저를 만드는 함수입니다
+    function makeOutListener(infowindow) {
+        return function() {
+            infowindow.close();
+        };
+    }
+
+    // 페이지 로드 되고 getMap() 함수 실행 -> 아래 함수 실행
+    // 아래 함수에서 DB의 모든 시장 위치 읽어옴
+    // '내 위치' 버튼 누르면 getGPS (전역함수 ~ 코르도바/자바 클래스) 함수 실행
+    // 다시 getMap() 함수 실행되는 사이클 형식
+    function getNearMarket() {
+
+      $.ajax({
+          url: "/searching/nearManager",
+          dataType: 'json',
+          type: 'POST',
+          contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+          // data: params,
+          success: function (result) {
+              if (result.rows.length > 0) {
+                for (var i = 0; i < result.rows.length; i++) {
+                  var tempLo = result.rows[i].market_location;
+                    tempLo = tempLo.split(', ');
+                  addMarker(new daum.maps.LatLng(parseFloat(tempLo[0]), parseFloat(tempLo[1])), result.rows[i]);
+                } // inner for
+              } else {
+                  console.log('DB error _ or _ index.js ~ router error');
+              } // if ~ else
+          },
+          error: function (e) {
+              console.log('process error : ', e);
+          }
+      }); // ajax
+    } // getNearMarket
+
+    // add event listenr
+    getMyLo.addEventListener('click', FUXKING_GPS, false);
+    FUXKING_GPS();
+    // window.seoulApp.getGPS();
+
+  </script>
+   <div id="nav_sj">
+        <div id="home_sj">
+            <img src="/images/home.png" width="40%">
+            <p>홈</p>
+        </div>
+        <div id="coupon_sj">
+            <img src="/images/coupon.png" width="40%">
+            <p>쿠폰</p>
+        </div>
+        <div id="location_sj">
+            <img src="/images/location2.png" width="40%">
+            <p id="nav_text">주변 가맹점</p>
+        </div>
+        <div id="myStamp_sj">
+            <img src="/images/stamp.png" width="40%">
+            <p>내 스탬프</p>
+        </div>
+        <div id="logout">
+            <img src="/images/logout.png" width="40%">
+            <p>로그아웃</p>
+        </div>
+    </div>
+
+    <script>
+      $('#myStamp_sj').click(function () {
+          location.href = "/myStamp";
+      });
+
+      $('#home_sj').click(function () {
+          location.href = "/main";
+      });
+
+      $('#coupon_sj').click(function () {
+          location.href = "/coupon";
+      });
+
+      $('#logout').click(function () {
+        $('.alert_select').css('display', 'block');
+        $('.alert_content_select').html('로그아웃 하시겠습니까?');
+
+        $('.alert_select_ok').click(function () {
+        $('.alert_select').css('display', 'none');
+        $(location).attr('href', '/logout');
+        });
+      }); // logout click event
+
+        $('.alert_select_cancel').click(function () {
+                $('.alert_out').css('display', 'none')
+                $('.alert_gps').css('display', 'none')
+                $('.alert_select').css('display', 'none')
+                $('.alert_select_ok').off();
+            });
+            $('.alert_select_cancel_gps').click(function () {
+                $('.alert_select').css('display', 'none')
+                $('.alert_out').css('display', 'none')
+                $('.alert_gps').css('display', 'none')
+                $('.alert_select_ok_gps').off();
+            });
+      $('.alert_o').click(function () {
+            $(this).css('display', 'none')
+        })
+    </script>
+</body>
+
+</html>

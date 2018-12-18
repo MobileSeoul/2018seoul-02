@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://code.jquery.com/jquery-3.1.1.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script type='application/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.js'></script>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/store_infor.css" />
+    <script>
+        window.addEventListener('load', function () {
+            FastClick.attach(document.body);
+        }, false);
+    </script>
+</head>
+
+<script>
+  document.addEventListener("backbutton", onBackKeyDown, false);
+  function onBackKeyDown(e) {
+     e.preventDefault();
+
+     var exitAppConfirm = confirm("앱을 종료하시겠습니까?");
+
+     if(exitAppConfirm) {
+       navigator.app.exitApp();
+     }
+
+  }
+</script>
+
+<body>
+
+    <div class="name_sj">
+        <p id="store_name_sj">
+          <%= title %>
+          <%= result.market_name %>
+          <%= result.sijang_name %>
+          <%= result.user_id %>
+        </p>
+        <p class="market_name_sj">
+
+        </p>
+    </div>
+    <div id="sns_sj">
+        <img id="noGood_Button_sj" src="/images/noGood.png" width="16%" height="auto">
+        <img id="yesGood_Button_sj" src="/images/yesGood.png" width="16%" height="auto">
+        <p id="goodCount_sj">215</p>
+        <img src="/images/ka.png" width="16%" height="auto">
+        <img src="/images/face.png" width="16%" height="auto">
+    </div>
+    <div id="menu_sj">
+        <p id="go_stamp_sj">스탬프</p>
+        <p id="go_store_detail_sj">상점 정보</p>
+        <p id="go_store_review_sj">리뷰</p>
+    </div>
+    <div id="stamp_menu_sj">
+        <div class="stamp_sj">
+
+            <div class="tenControls_sj">
+                <div class="tenStamp_sj">
+
+                    <div class="tenStamp_top_sj">
+                        <div class="ten_sj">
+                            <p>1</p>
+                        </div>
+                        <div class="ten_sj">
+                            <p>2</p>
+                        </div>
+                        <div class="ten_sj">
+                            <p>3</p>
+                        </div>
+                        <div class="ten_sj">
+                            <p>4</p>
+                        </div>
+                        <div class="ten_sj">
+                            <p>5</p>
+                        </div>
+                    </div>
+
+                    <div class="tenStamp_bottom_sj">
+                        <div class="ten_sj">
+                            <p>6</p>
+                        </div>
+                        <div class="ten_sj">
+                            <p>7</p>
+                        </div>
+                        <div class="ten_sj">
+                            <p>8</p>
+                        </div>
+                        <div class="ten_sj">
+                            <p>9</p>
+                        </div>
+                        <div class="ten_sj">
+                            <p>10</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="fiveControls_sj">
+                <div class="fiveStamp_sj">
+                    <div class="five_sj">
+                        <p>1</p>
+                    </div>
+                    <div class="five_sj">
+                        <p>2</p>
+                    </div>
+                    <div class="five_sj">
+                        <p>3</p>
+                    </div>
+                    <div class="five_sj">
+                        <p>4</p>
+                    </div>
+                    <div class="five_sj">
+                        <p>5</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div id="stamp_infor_sj">
+            <p>기준:5000원 이상</p>
+            <p>보상:
+
+            </p>
+        </div>
+
+        <button class="button_sj">다운받기</button>
+    </div>
+
+
+
+    <div class="store_detail_sj">
+        <h2>상점 소개</h2>
+        <p>저희 과일 가게는 항상 신선한 유기농 과일만을 공수해 옵니다. </p>
+        <img src="/images/fruit.jpg" width="100%">
+        <!-- <img src="10.png" width="100%"> -->
+
+        <h2>위치</h2>
+        <img src="/images/han.png" width="100%">
+    </div>
+
+
+
+
+    <div class="store_review_sj">
+        <button class="review_button_sj">리뷰 등록</button>
+        <div class="review_div_sj">
+
+            <div class="review_content_sj">
+                <div class="review_content_id_sj">
+                    <b>gkstjdwls11</b>
+                </div>
+                <div class="review_content_date_sj">18-07-12</div>
+            </div>
+            <p>과일이 굉장히 신선하고 좋았습니다! 사장님도 굉장히 친절하셔요</p>
+        </div>
+
+        <div class="review_div_sj">
+            <div class="review_content_sj">
+                <div class="review_content_id_sj">
+                    <b>kingkw</b>
+                </div>
+                <div class="review_content_date_sj">18-07-13</div>
+            </div>
+            <p>사장님이 굉장히 친절하시다던데..누가 그런말은 하는건지 완전 불친절ㅡㅡ</p>
+        </div>
+
+        <div class="review_div_sj">
+            <div class="review_content_sj">
+                <div class="review_content_id_sj">
+                    <b>simson94</b>
+                </div>
+                <div class="review_content_date_sj">18-07-13</div>
+            </div>
+            <p>이 집에서 멜론 사먹어봤는데 진짜 엄청 달더라고요ㅋㅋ 다음에 와이프 데리고 한번 더 사러 가겠습니다. 번창하세요!</p>
+        </div>
+
+        <div class="review_div_sj">
+            <div class="review_content_sj">
+                <div class="review_content_id_sj">
+                    <b>jungjaeho1115</b>
+                </div>
+                <div class="review_content_date_sj">18-07-14</div>
+            </div>
+            <p>사과가 다른 가게보다 좀 비싼 감이 있었지만 다른 과일들은 모두 저렴하고 상품도 좋네요!</p>
+        </div>
+
+
+
+    </div>
+
+    <div id="review_write_sj">
+        <textarea rows="7"></textarea>
+        <div id="write_button_div_sj">
+            <button id="write_cancel_sj" style="margin-left: 12.5%">취소</button>
+            <button style="margin-left:5%">등록</button>
+        </div>
+    </div>
+
+
+    <div id="nav_sj">
+        <div id="coupon_sj">
+            <img src="/images/coupon.png" width="60%">
+            <br/>쿠폰</div>
+        <div id="search_sj">
+            <img src="/images/search.png" width="60%">
+            <br/>서울 시장</div>
+        <div id="location_sj">
+            <img src="/images/location.png" width="60%">
+            <br/>주변 가맹점</div>
+        <div id="myStamp_sj">
+            <img src="/images/stamp.png" width="60%">
+            <br/>내 스탬프</div>
+        <div id="my_sj">
+            <img src="/images/my.png" width="60%">MyPage</div>
+    </div>
+
+
+    <script>
+
+        var reset_stamp_count = 0;
+        var stamp_standard = '<%= stamp_standard %>';
+        console.log(stamp_standard);
+        if (stamp_standard == 5) {
+            $('.fiveControls_sj').css('display', 'table');
+
+        }
+
+        if (stamp_standard == 10) {
+            $('.tenControls_sj').css('display', 'table');
+
+        }
+        $('.button_sj').click(function(){
+          var market_name = '<%= market_name %>';
+          var sijang_name = '<%= sijang_name %>';
+          var user_id = '<%= user_id %>';
+          var stamp_count = 0;
+          var stamp_standard = '<%= stamp_standard %>';
+          var stamp_reward = '<%= stamp_reward %>';
+          var stamp_password = '<%= stamp_password %>';
+          var data = {
+            'market_name' : market_name,
+            'sijang_name' : sijang_name,
+            'user_id' : user_id,
+            'stamp_count' : stamp_count,
+            'stamp_standard' : stamp_standard,
+            'stamp_reward' : stamp_reward,
+            'stamp_password' : stamp_password,
+          }
+          $.ajax({ // ajax 통신으로 지원자 입력한 정보를 서버에 보낸다.
+            type: 'POST',
+            url: '/make_stamp',
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            cache: false,
+            dataType: 'json',
+            data: data,
+            success: function (result) {
+              if (result['result'] == 'success') {
+                alert('스탬프생성');
+                location.reload();
+              } else if(result['result']=='already'){
+                alert('스탬프 이미 존재');
+                location.reload();
+              }
+            },
+            error: function (error) {
+              console.log('erer');
+            }
+          });
+        });
+    </script>
+    <script src="/javascripts/store_infor.js"></script>
+    <!-- myStamp 메뉴 관련 js -->
+
+
+</body>
+
+</html>

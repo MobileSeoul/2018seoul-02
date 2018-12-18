@@ -1,0 +1,1126 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Page Title</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+  <script src='/cordova/cordova.js'></script>
+  <script src='/cordova/cordova_plugins.js'></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/spin.js/2.3.2/spin.min.js"></script>
+  <script src="/javascripts/spin.js"></script>
+  <link rel="stylesheet" href="/stylesheets/swiper.min.css">
+  <link rel="stylesheet" type="text/css" href="/stylesheets/stamp.css" />
+  <!-- <script type='application/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.js'></script> -->
+  <!-- <script>
+  window.addEventListener('load', function () {
+    FastClick.attach(document.body);
+  }, false);
+  </script> -->
+</head>
+
+<script>
+  document.addEventListener("backbutton", onBackKeyDown, false);
+  function onBackKeyDown(e) {
+    e.preventDefault();
+      $('.alert_out').css('display', 'block');
+      $('.alert_content_select').html('앱을 종료하시겠습니까?')
+      $('.alert_select_ok_out').click(function () {
+       navigator.app.exitApp();
+      });
+  }
+
+  // function onBackKeyDownMsg(button) {
+  //   if(button == 2) {
+  //     navigator.app.exitApp();
+  //   }
+  // }
+
+
+</script>
+<!-- kakao map API (hw edit) -->
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=1f14a7f1512988347e7ffdd75ac7ab4c"></script>
+<body>
+<div class="alert_x" style="display:none">
+  <div class="alert_x_content">
+    <div class="alert_image">
+      <img src="/images/alert_x.png" width="70px" height="70px" >
+    </div>
+    <div class="alert_content">
+    </div>
+  </div>
+</div>
+
+<div class="alert_o" style="display:none">
+    <div class="alert_o_content">
+      <div class="alert_image">
+        <img src="/images/alert_o.png" width="70px" height="70px" >
+      </div>
+      <div class="alert_content">
+      </div>
+    </div>
+  </div>
+
+    <div class="alert_select"  style="display:none">
+        <div class="alert_o_content">
+          <div class="alert_content_select">
+          </div>
+          <div class="alert_select_cancel">
+            취소
+          </div>
+          <div class="alert_select_ok">
+              확인
+            </div>
+        </div>
+      </div>
+      <div class="alert_out"  style="display:none">
+                    <div class="alert_o_content">
+                      <div class="alert_content_select">
+                      </div>
+                      <div class="alert_select_cancel">
+                        취소
+                      </div>
+                      <div class="alert_select_ok_out">
+                          확인
+                        </div>
+                    </div>
+                  </div>
+
+<div id="manager_Map" style="width:90%; height:250px; margin-left:5%; display: none;"></div>
+
+  <div id="myStamp">
+    <!-- <label>내 스탬프</label> -->
+    <% if(myStamps) { %>
+      <% for(var i=0; i<myStamps.length; i++) { %>
+        <div class="stamp_one" id='stamp_list<%= myStamps[i].id %>'>
+
+            <div class="store_market_name"><%= myStamps[i].market_name %></div>
+            <div class="my_stamp_count">
+                <div class="stamp_count_vertical" id='stamp_count_vertical<%= myStamps[i].id %>'>
+                    <p class="count_stamp">
+                        <%= myStamps[i].stamp_count %>&nbsp/
+                            <%= myStamps[i].stamp_standard %>
+                    </p>
+                </div>
+            </div>
+            <div class="stamp_market">
+                    <p class="deadline"><%= myStamps[i].sijang_name %></p>
+                    <div class="logo_image">
+                    <img src="/images/inline-logo.png" width="75%" height="auto" style="padding-top: 12%;padding-left: 8%;">
+                </div>
+            </div>
+        </div>
+        <% } %>
+        <% } else { %>
+          <div class='stamp_list'>
+            <div id="no_stamp">발급받은 스탬프가 없습니다.</div>
+          </div>
+          <% } %>
+        </div>
+
+
+        <% if(myStamps) { %>
+          <div id='stamp_details'>
+          <% for(var i=0; i<myStamps.length; i++) { %>
+
+            <div class='selected_stamp' id="selected_stamp<%= myStamps[i].id %>">
+                <div class="back_div" id="back_div<%= myStamps[i].id %>">
+                    <img id="tableControl<%= myStamps[i].id %>" src="/images/backButton_blue.png" width="23px" height="23px">
+                </div>
+                <div id="menu_infor">
+                <div id="top_infor">
+                  <div id="name_sj">
+                    <p id="store_name_sj"><%= myStamps[i].market_name %></p>
+                    <p id="market_name_sj"><%= myStamps[i].sijang_name %></p>
+                  </div>
+                  <div id="sns_sj">
+                    <div id="good" class="good<%= myStamps[i].id %>">
+                      <% if(! myStamps[i].like_check) { %>
+                        <img class='top_image' id="noGood_Button_sj<%= myStamps[i].id %>" src="/images/nolikeM.png" width="30px" height="30px"style='display: inline-block;'>
+                        <img class='top_image' id="yesGood_Button_sj<%= myStamps[i].id %>" src="/images/likeM.png" width="30px" height="30px" style='display: none;'>
+                      <% } else { %>
+                        <img class='top_image' id="yesGood_Button_sj<%= myStamps[i].id %>" src="/images/likeM.png" width="30px" height="30px"style='display: inline-block;'>
+                        <img class='top_image' id="noGood_Button_sj<%= myStamps[i].id %>" src="/images/nolikeM.png" width="30px" height="30px" style='display: none;'>
+                      <% } %>
+                            <p class="top_font" id="goodCount_sj<%= myStamps[i].id %>">
+                              <%= myStamps[i].like_count %>
+                            </p>
+                    </div>
+                      <!-- <div id="kakao">
+                        <img class="top_image" src="/images/kakao_bic.png" width="30px" height="30px">
+                        <p class="top_font">공유하기</p>
+                      </div> -->
+
+                    <div id="face<%= myStamps[i].id %>">
+                      <img class="top_image" src="/images/face.png" width="30px" height="30px">
+                      <p class="top_font">공유하기</p>
+                    </div>
+                    <script>
+                      $('#face<%= myStamps[i].id %>').click(function() {
+                        var sijang_name = '<%= myStamps[i].sijang_name %>';
+                        var market_name = '<%= myStamps[i].market_name %>';
+                        var shareUrl = 'http://18.219.181.225:3000/share/' + sijang_name.replace(/ /gi, '%20') + '/' + market_name.replace(/ /gi, '%20');
+
+                        // window.plugins.socialsharing.shareViaFacebook(null, null, shareUrl, null, null);
+                        window.plugins.socialsharing.shareViaFacebook(null, null, shareUrl, function() {console.log('share ok')}, function(errormsg){
+                  				//alert(errormsg)
+                  				var goToPlayStoreConfirm = confirm('본 기능은 해당 기기에 페이스북 어플리케이션이 있어야 실행이 가능합니다. 앱을 설치하시겠습니까?');
+                  	      if(goToPlayStoreConfirm) {
+                  	        window.location.href = 'https://play.google.com/store/apps/details?id=com.facebook.katana';
+                  	      }
+                  			});
+
+                      });
+                    </script>
+                  </div>
+                </div>
+                <div id="bottom_infor">
+                  <p class="go_slide" style="color:#63dded;">스탬프</p>
+                  <p class="go_slide">상점정보</p>
+                  <p class="go_slide">리뷰</p>
+                  <p class="go_slide">리뷰작성</p>
+                </div>
+        </div>
+
+
+              <div class="swiper-container s1<%= myStamps[i].id %>">
+                  <div class="swiper-wrapper">
+            <div class="swiper-slide">
+              <div class='stamp_menu_sj' id="stamp_menu_sj<%= myStamps[i].id %>">
+                <div class="stamp_mente">스탬프 추가 시 스탬프를 클릭해주세요.</div>
+                <div class='stamp_sj' id="stamp_sj<%= myStamps[i].id %>">
+                  <div class='tenControls_sj' id="tenControls_sj<%= myStamps[i].id %>">
+                    <div class='tenStamp_sj' id="tenStamp_sj<%= myStamps[i].id %>">
+                      <div class='tenStamp_top_sj' id="tenStamp_top_sj<%= myStamps[i].id %>">
+                        <div class="ten_sj <%= myStamps[i].id %>">
+                          <p>1</p>
+                        </div>
+                        <div class="ten_sj <%= myStamps[i].id %>">
+                          <p>2</p>
+                        </div>
+                        <div class="ten_sj <%= myStamps[i].id %>">
+                          <p>3</p>
+                        </div>
+                        <div class="ten_sj <%= myStamps[i].id %>">
+                          <p>4</p>
+                        </div>
+                        <div class="ten_sj <%= myStamps[i].id %>">
+                          <p>5</p>
+                        </div>
+                      </div>
+                      <div class='tenStamp_bottom_sj' id="tenStamp_bottom_sj<%= myStamps[i].id %>">
+                        <div class="ten_sj <%= myStamps[i].id %>">
+                          <p>6</p>
+                        </div>
+                        <div class="ten_sj <%= myStamps[i].id %>">
+                          <p>7</p>
+                        </div>
+                        <div class="ten_sj <%= myStamps[i].id %>">
+                          <p>8</p>
+                        </div>
+                        <div class="ten_sj <%= myStamps[i].id %>">
+                          <p>9</p>
+                        </div>
+                        <div class="ten_sj <%= myStamps[i].id %>">
+                          <p id="ten">10</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class='fiveControls_sj' id="fiveControls_sj<%= myStamps[i].id %>">
+                    <div class='fiveStamp_sj' id="fiveStamp_sj<%= myStamps[i].id %>">
+                      <div class="five_sj <%= myStamps[i].id %>">
+                        <p>1</p>
+                      </div>
+                      <div class="five_sj <%= myStamps[i].id %>">
+                        <p>2</p>
+                      </div>
+                      <div class="five_sj <%= myStamps[i].id %>">
+                        <p>3</p>
+                      </div>
+                      <div class="five_sj <%= myStamps[i].id %>">
+                        <p>4</p>
+                      </div>
+                      <div class="five_sj <%= myStamps[i].id %>">
+                        <p>5</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="stamp_infor">
+                    <img src="/images/standard.png" width="30px" height="30px">
+                    <div class="name">적립기준</div>
+                    <div class="stamp_infor_content"><%= myStamps[i].market_promotion %></div>
+                </div>
+
+                <div class="stamp_infor">
+                    <img src="/images/rewardM.png" width="30px" height="30px">
+                    <div class="name">보상기준</div>
+                    <div class="stamp_infor_content"><%= myStamps[i].stamp_reward %></div>
+                </div>
+
+
+
+                <button class='button_sj' id="delete_button_sj<%= myStamps[i].id %>">삭제</button>
+              </div>
+            </div>
+              <div class='password_number_div_sj' id="password_number_div_sj<%= myStamps[i].id %>">
+                <div class="password_check" id="password_check<%= myStamps[i].id %>">
+                  <div class="check<%= myStamps[i].id %>"></div>
+                  <div class="check<%= myStamps[i].id %>"></div>
+                  <div class="check<%= myStamps[i].id %>"></div>
+                  <div class="check<%= myStamps[i].id %>"></div>
+                </div>
+                <div class="password_line_sj <%= myStamps[i].id %>">
+                  <div class="password_number_sj <%= myStamps[i].id %>"></div>
+                  <div class="password_number_sj <%= myStamps[i].id %>"></div>
+                  <div class="password_number_sj <%= myStamps[i].id %>"></div>
+                </div>
+                <div class="password_line_sj <%= myStamps[i].id %>">
+                  <div class="password_number_sj <%= myStamps[i].id %>"></div>
+                  <div class="password_number_sj <%= myStamps[i].id %>"></div>
+                  <div class="password_number_sj <%= myStamps[i].id %>"></div>
+                </div>
+                <div class="password_line_sj <%= myStamps[i].id %>">
+                  <div class="password_number_sj <%= myStamps[i].id %>"></div>
+                  <div class="password_number_sj <%= myStamps[i].id %>"></div>
+                  <div class="password_number_sj <%= myStamps[i].id %>"></div>
+                </div>
+                <div class="password_line_sj <%= myStamps[i].id %>">
+                  <div class='password_cancel' id="password_cancel<%= myStamps[i].id %>">취소</div>
+                  <div class="password_number_sj <%= myStamps[i].id %>"></div>
+                  <div class='password_back' id="password_ok<%= myStamps[i].id %>">
+                      <img src="/images/left-arrow.png" width="22px" height="22px" style="padding-top: 26px;">
+                  </div>
+                </div>
+              </div>
+              <!-- </div> -->
+
+
+              <div class="swiper-slide">
+                  <div id="store_detail_sj">
+                      <div class="store_image" style="background: url('<%= myStamps[i].manager_image %>'); background-repeat: no-repeat; background-position: center center; background-size: 100%;"></div>
+                      <div id="introduce">
+                          <img src="/images/storeM.png" width="30px" height="30px">
+                          <div class="name">상점소개</div>
+                          <div id="intro_content"><%= myStamps[i].market_introduce %></div>
+                      </div>
+                      <div id="map<%= myStamps[i].id %>" class="map_myStamp_class">
+                        <div id="map_intro">
+                          <img src="/images/location3.png" width="30px" height="30px">
+                          <div class="name">위치</div>
+                        </div>
+                      </div>
+                  </div>
+              </div>
+
+              <div class="swiper-slide">
+              <div class='store_review_sj' id="store_review_sj<%= myStamps[i].id %>">
+                <div class="review_rate">
+                  <div class="review_star">
+                    <% if(review) { %>
+                      <% for(var j=0; j<avgOfRate.length; j++) { %>
+                        <% if(avgOfRate[j].market_name == myStamps[i].market_name && avgOfRate[j].sijang_name == myStamps[i].sijang_name && avgOfRate[j].rateCnt) { %>
+                          <% for(var k=0; k<avgOfRate[j].avgRate; k++) { %>
+                            <div>
+                              <img class="star_yellow" src="/images/star_yellow.png" width="30px" height="30px">
+                            </div>
+                          <% } %>
+
+                          <% for(var k=0; k<5-avgOfRate[j].avgRate; k++) { %>
+                            <div>
+                              <img class="star_gray" src="/images/star_gray.png" width="30px" height="30px">
+                            </div>
+                          <% } %>
+                        <% } else if(avgOfRate[j].market_name == myStamps[i].market_name && avgOfRate[j].sijang_name == myStamps[i].sijang_name && ! avgOfRate[j].rateCnt) { %>
+                          <% for(var k=0; k<5; k++) { %>
+                            <div>
+                              <img class="star_gray" src="/images/star_gray.png" width="30px" height="30px">
+                            </div>
+                          <% } %>
+                        <% } %>
+                      <% } %>
+                    <% } else { %>
+                      <% for(var k=0; k<5; k++) { %>
+                        <div>
+                          <img class="star_gray" src="/images/star_gray.png" width="30px" height="30px">
+                        </div>
+                      <% } %>
+                    <% } %>
+                  </div>
+                  <div class="review_count">
+
+                    <!-- <p style="font-size: 20px; color: #9c9c9c;">리뷰</p> -->
+                    <% if(review) { %>
+                      <% for(var j=0; j<avgOfRate.length; j++) { %>
+                        <% if(avgOfRate[j].market_name == myStamps[i].market_name && avgOfRate[j].sijang_name == myStamps[i].sijang_name && avgOfRate[j].rateCnt) { %>
+                          <p class="review_count_content" id='review_count_content<%= myStamps[i].id %>'><%= avgOfRate[j].rateCnt %></p>
+                          <p style="font-size: 20px; color: #9c9c9c;">개의 리뷰가 있습니다.</p>
+                        <% } else if(avgOfRate[j].market_name == myStamps[i].market_name && avgOfRate[j].sijang_name == myStamps[i].sijang_name && ! avgOfRate[j].rateCnt) { %>
+                          <p style="font-size: 20px; color: #9c9c9c;">작성된 리뷰가 없습니다.</p>
+                        <% } %>
+                      <% } %>
+                    <% } else { %>
+                      <p style="font-size: 20px; color: #9c9c9c;">작성된 리뷰가 없습니다.</p>
+                    <% } %>
+
+                  </div>
+
+                  <div id="intro">
+                    <p>
+                        <%= myStamps[i].market_name %> 상점을 이용하는 고객들의 리뷰입니다.
+                    </p>
+                  </div>
+                  <div class="line">
+
+                  </div>
+
+                </div>
+
+
+                <% if(review) {%>
+                  <% for(var j=0; j<review.length; j++) { %>
+                    <% if(review[j].market_name == myStamps[i].market_name && review[j].sijang_name == myStamps[i].sijang_name) { %>
+
+                <div class="review_div_sj" id='review_div_sj<%= myStamps[i].id %>'>
+                    <div class="review_star_customer">
+                        <% if(review[j].user_id != '사장님') {%>
+
+                        <% for(var k=0; k<review[j].rate; k++) { %>
+                        <div>
+                            <img class="star_yellow_customer" src="/images/star_yellow.png" width="20px" height="20px">
+                        </div>
+                        <% } %>
+
+                        <% for(var k2=0; k2<5-review[j].rate; k2++) { %>
+                          <div>
+                              <img class="star_gray_customer" src="/images/star_gray.png" width="20px" height="20px">
+                          </div>
+                        <% } %>
+                        <% } else {%>
+
+                          <div>
+                              <img class="star_gray_customer" src="/images/logo_with_text_small.png" width="60px" height="15px">
+                          </div>
+                          <% }%>
+                    </div>
+                  <div class="review_content_sj">
+                    <div class="review_content_id_sj" id='review_content_id_sj<%= review[j].id %>'>
+                      <% if(review[j].provider == 'kakao') { %>
+                        <%= review[j].username %>
+                      <% } else { %>
+                        <script>
+                        var temp = '<%= review[j].user_id %>';
+                        var secret = '***';
+                        var l = temp.length;
+                        var f = l-3;
+                        //console.log(f);
+                        //console.log(l);
+                        var temp2 = temp.substring(0,f);
+                        var result3 = temp2.concat(secret);
+
+                        if(result3 == '***'){
+                          $('#review_content_id_sj<%= review[j].id %>').html('사장님');
+                        }else{
+                          $('#review_content_id_sj<%= review[j].id %>').html(result3);
+                          console.log(result3);
+                        }
+                        //  console.log("아래");
+                        //  console.log(result3);
+                        </script>
+                      <% } %>
+
+                    </div>
+                    <div class="review_content_date_sj">
+                      <%= review[j].date %>
+                    </div>
+                  </div>
+                  <p><%= review[j].review %></p>
+                  <div class="line">
+                    </div>
+                </div>
+                  <% } else {%>
+                    <% } %>
+                    <% } %>
+                <% } else { %>
+                  <!-- <div class='stamp_list'>
+                    <div id="no_stamp">리뷰가 없습니다.</div>
+                  </div> -->
+                  <% } %>
+              </div>
+            </div>
+              <div class="swiper-slide">
+              <div class='review_write_sj' id="review_write_sj<%= myStamps[i].id %>">
+
+                <div id="write_div">리뷰 작성</div>
+
+                <textarea class="review_textarea <%= myStamps[i].id %>" id='review_textarea<%= myStamps[i].id %>' rows="6"></textarea>
+                <div class="star_upload">
+                    <div class="star<%= myStamps[i].id %>">
+                      <img class="gray<%= myStamps[i].id %>" id="gray1<%= myStamps[i].id %>"src="/images/star_gray.png" width="40px"height="40px">
+                      <img class="yellow<%= myStamps[i].id %>" id="yellow1<%= myStamps[i].id %>"src="/images/star_yellow.png" width="40px"height="40px" style="display: none">
+                    </div>
+                    <div class="star<%= myStamps[i].id %>">
+                        <img class="gray<%= myStamps[i].id %>" id="gray2<%= myStamps[i].id %>"src="/images/star_gray.png" width="40px"height="40px">
+                      <img class="yellow<%= myStamps[i].id %>" id="yellow2<%= myStamps[i].id %>"src="/images/star_yellow.png" width="40px"height="40px" style="display: none">
+                    </div>
+                    <div class="star<%= myStamps[i].id %>">
+                        <img class="gray<%= myStamps[i].id %>" id="gray3<%= myStamps[i].id %>"src="/images/star_gray.png" width="40px"height="40px">
+                        <img class="yellow<%= myStamps[i].id %>" id="yellow3<%= myStamps[i].id %>"src="/images/star_yellow.png" width="40px"height="40px" style="display: none">
+                    </div>
+                    <div class="star<%= myStamps[i].id %>">
+                        <img class="gray<%= myStamps[i].id %>" id="gray4<%= myStamps[i].id %>"src="/images/star_gray.png" width="40px"height="40px">
+                        <img class="yellow<%= myStamps[i].id %>" id="yellow4<%= myStamps[i].id %>"src="/images/star_yellow.png" width="40px"height="40px" style="display: none">
+                    </div>
+                    <div class="star<%= myStamps[i].id %>">
+                        <img class="gray<%= myStamps[i].id %>" id="gray5<%= myStamps[i].id %>"src="/images/star_gray.png" width="40px"height="40px">
+                        <img class="yellow<%= myStamps[i].id %>" id="yellow5<%= myStamps[i].id %>"src="/images/star_yellow.png" width="40px"height="40px" style="display: none">
+                    </div>
+                  </div>
+                  <p id="intro_star">만족도만큼 별을 클릭해 주세요</p>
+                <!-- <div class='write_button_div_sj' id="write_button_div_sj<%= myStamps[i].id %>"> -->
+                  <button class="write_ok_button <%= myStamps[i].id %>" id='write_ok_button<%= myStamps[i].id %>'>등록</button>
+                <!-- </div> -->
+              </div>
+            </div>
+
+            </div>
+
+            <div class="swiper-scrollbar"></div>
+            </div>
+            </div>
+            <!-- ▼ hw edit; map javascirpt -->
+            <script type="text/javascript">
+
+            var markers = []; // 지도에 표시된 마커 객체를 가지고 있을 배열입니다
+
+            // document.getElementById('map') 차일드 노드 여부로 map의 중복 생성, 겹침을 해결하였다.
+            // if (document.getElementById('manager_Map').hasChildNodes()) {
+            //     document.getElementById('manager_Map').innerHTML = null;
+            // }
+
+            // 지도를 표시할 div (id)
+            var mapContainer = document.getElementById('manager_Map'),
+                mapOption = {
+                    center: new daum.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
+                    level: 4 // 지도의 확대 레벨
+                };
+
+            var map = new daum.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+
+            // 마커를 생성하고 지도위에 표시하는 함수입니다
+            function addMarker(position) {
+
+                // 마커를 생성합니다
+                var marker = new daum.maps.Marker({
+                    position: position
+                });
+
+                // 마커가 지도 위에 표시되도록 설정합니다
+                marker.setMap(map);
+
+                // 생성된 마커를 배열에 추가합니다
+                markers.push(marker);
+            }
+
+            function setMarkers(map) {
+                for (var i = 0; i < markers.length; i++) {
+                    markers[i].setMap(map);
+                }
+            }
+
+            function relayout() {
+                // 지도를 표시하는 div 크기를 변경한 이후 지도가 정상적으로 표출되지 않을 수도 있습니다
+                // 크기를 변경한 이후에는 반드시  map.relayout 함수를 호출해야 합니다
+                // window의 resize 이벤트에 의한 크기변경은 map.relayout 함수가 자동으로 호출됩니다
+                map.relayout();
+            }
+
+            function changeCenter(getLat, getLng) {
+                var moveLatLon = new daum.maps.LatLng(getLat, getLng);
+                relayout();
+                // 지도 중심을 이동 시킵니다
+                map.setCenter(moveLatLon);
+                map.setLevel(4);
+            } // changeCenter
+
+            </script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.3.3/js/swiper.min.js"></script>
+            <script>
+            var number1 = "";
+            var swiper
+            var stamp_index
+
+            // 들여쓰기 난해... 595 line까지
+            $('#stamp_list<%= myStamps[i].id %>').click(function () {
+              // 콜백 틀수성 때문에, 논콜백 호출위해 클릭 펑션에 제일먼저 수행시킴
+              $('#manager_Map').css('display', 'block');
+              $('#map<%= myStamps[i].id %>').append($('#manager_Map'));
+
+              stamp_index=$(this).index()
+              $('.go_slide').eq(stamp_index*4).css('color', '#63dded');
+              // 스크롤 조절
+              window.scrollTo(0, 0);
+              $('#selected_stamp<%= myStamps[i].id %>').css('display', 'block');
+              $('.s1<%= myStamps[i].id %>').css('display', 'block');
+              $('#back_div<%= myStamps[i].id %>').css('display', 'block');
+              $('#myStamp').css('display', 'none');
+              swiper = new Swiper('.s1<%= myStamps[i].id %>', {
+                initialSlide: 0,
+                autoHeight: true,
+                observer: true,
+                observeParents: true,
+                scrollbar: {
+                  el: '.swiper-scrollbar',
+                  hide: true,
+                },
+              });
+              swiper.on('slideChangeTransitionStart', function () {
+                var active = swiper.activeIndex+(stamp_index*4);
+                $('.go_slide').css('color', 'black');
+                $('.go_slide').eq(active).css('color', '#63dded');
+              });
+
+              // hw edit; map setting part - KAKAO MAP API
+              var tempO = $('.store_market_name')[stamp_index];
+              var tempT = $('.deadline')[stamp_index];
+              $.ajax({
+                  url: "/searching/marketList",
+                  dataType: 'json',
+                  type: 'POST',
+                  contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                  data: {
+                      "name": tempT.innerText,
+                      "market_name": tempO.innerText
+                  },
+                  success: function (result) {
+                      if (result.rows.length > 0) {
+                          // manager get gps ~ display map, marker!
+                          // tempLo는 result의 location -> 위도 경도값 가짐
+                          var tempLo = result.rows[0].market_location;
+                          tempLo = tempLo.split(', ')
+
+                          setMarkers(null);
+                          addMarker(new daum.maps.LatLng(parseFloat(tempLo[0]), parseFloat(tempLo[1])));
+                          changeCenter(tempLo[0], tempLo[1])
+                      } else {
+                          console.log("시장(상점)이름 존재하지 않음");
+                      }
+                  },
+                  error: function (e) {
+                      alert("main.ejs");
+                      console.log('process error : ', e);
+                  }
+              }); // ajax
+
+            }); // stamp_list[index] click event
+
+
+            $('.go_slide').click(function () {
+              var slide_index = $(this).index();
+              var this_index = $('.go_slide').index(this);
+              $('.go_slide').css('color', 'black');
+              $('.go_slide').eq(this_index).css('color', '#63dded');
+              swiper.slideTo(slide_index, 500, false);
+              });
+
+            $('#back_div<%= myStamps[i].id %>').click(function () {
+              swiper.destroy();
+              $('.go_slide').css('color', 'black');
+              $('.go_slide').eq(0).css('color', '#63dded');
+
+              $('#selected_stamp<%= myStamps[i].id %>').css('display', 'none');
+              $('#back_div<%= myStamps[i].id %>').css('display', 'none');
+              $('#myStamp').css('display', 'block');
+            });
+
+            var stamp_count<%= myStamps[i].id %> = parseInt('<%= myStamps[i].stamp_count %>');
+            var stamp_standard<%= myStamps[i].id %> = '<%= myStamps[i].stamp_standard %>';
+            var reset_stamp_count = 0;
+            var new_stamp_count = parseInt(stamp_count<%= myStamps[i].id %>) + 1;
+            console.log(stamp_count<%= myStamps[i].id %>);
+            console.log('<%= myStamps[i].id %>');
+
+            /* 스탬프 테마 적용 */
+
+
+            /*  적립해놓은 스탬프 색칠  */
+            if (stamp_standard<%= myStamps[i].id %> == 5) {
+              $('#fiveControls_sj<%= myStamps[i].id %>').css('display', 'table');
+              for (var i = 0; i < stamp_count<%= myStamps[i].id %>; i++) {
+                var check = document.getElementsByClassName('five_sj <%= myStamps[i].id %>')[i];
+
+                check.style.backgroundImage = "url('/images/circle_logo.png')";
+                check.style.backgroundSize = 'cover';
+                // check.style.backgroundPosition = 'center';
+                // check.innerHTML='';
+                // check.style.backgroundColor='black'
+
+              }
+            }
+            else if (stamp_standard<%= myStamps[i].id %> == 10) {
+              $('#tenControls_sj<%= myStamps[i].id %>').css('display', 'table');
+              for (var i = 0; i < stamp_count<%= myStamps[i].id %>; i++) {
+                var check = document.getElementsByClassName('ten_sj <%= myStamps[i].id %>')[i];
+
+                check.style.backgroundImage = "url('/images/circle_logo.png')";
+                check.style.backgroundSize = 'cover';
+                // check.style.backgroundPosition = 'center';
+                // check.innerHTML='';
+                // check.style.backgroundColor='black'
+
+              }
+            }
+
+            /*  좋아요  */
+            var good<%= myStamps[i].id %> = document.getElementById('goodCount_sj<%= myStamps[i].id %>');
+
+            $('.good<%= myStamps[i].id %>').click(function () {
+              if ($('#noGood_Button_sj<%= myStamps[i].id %>').css('display') == 'inline-block'){
+              var data = {
+                'market_name' : '<%= myStamps[i].market_name %>',
+                'sijang_name' : '<%= myStamps[i].sijang_name %>',
+                'like_count' : parseInt(good<%= myStamps[i].id %>.textContent) + 1
+              }
+              $.ajax({
+                type: 'post',
+                url: '/like/<%= myStamps[i].id %>',
+                contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+                cache: false,
+                data: data,
+                datatype: 'json',
+                success: function(result) {
+                  if (result['result']=='success'){
+                    console.log(result);
+                    $('#noGood_Button_sj<%= myStamps[i].id %>').css('display', 'none');
+                    $('#yesGood_Button_sj<%= myStamps[i].id %>').css('display', 'inline-block');
+                    good<%= myStamps[i].id %>.innerHTML = result['like'];
+                  }
+                },
+                error: function(error){
+                  console.log('좋아요 실패');
+                }
+              });
+            }
+            else{
+              var data = {
+                'market_name' : '<%= myStamps[i].market_name %>',
+                'sijang_name' : '<%= myStamps[i].sijang_name %>',
+                'like_count' : parseInt(good<%= myStamps[i].id %>.textContent) - 1
+              }
+              $.ajax({
+                type: 'post',
+                url: '/cancel_like/<%= myStamps[i].id %>',
+                contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+                cache: false,
+                data: data,
+                datatype: 'json',
+                success: function(result) {
+                  if (result['result']=='success'){
+                    $('#yesGood_Button_sj<%= myStamps[i].id %>').css('display', 'none');
+                    $('#noGood_Button_sj<%= myStamps[i].id %>').css('display', 'inline-block');
+                    good<%= myStamps[i].id %>.innerHTML = result['like'];
+                  }
+                },
+                error: function(error){
+                  console.log('좋아요 취소 실패');
+                }
+              });
+            }
+            });
+
+
+
+            /* 비밀번호 키패드 섞는 함수 */
+            var password_number_array_sj = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'];
+            function shuffle(a) {
+              var j, x, i;
+              for (i = a.length; i; i -= 1) {
+                j = Math.floor(Math.random() * i);
+                x = a[i - 1];
+                a[i - 1] = a[j];
+                a[j] = x;
+              }
+            }
+
+            /*  리뷰 등록 시 별점 클릭 이벤트  */
+            var starRate<%= myStamps[i].id %>;
+            $('.star<%= myStamps[i].id %>').click(function(){
+                $('.yellow<%= myStamps[i].id %>').css('display','none')
+                  $('.gray<%= myStamps[i].id %>').css('display','block')
+                var star_index=$(this).index();
+                for(var i=0; i<star_index+1; i++){
+
+                  document.getElementsByClassName('gray<%= myStamps[i].id %>')[i].style.display='none';
+                  document.getElementsByClassName('yellow<%= myStamps[i].id %>')[i].style.display='block';
+
+                }
+
+                starRate<%= myStamps[i].id %> = star_index + 1;
+
+              })
+
+            /* 리뷰 작성 버튼 */
+
+            var chk_send = 0;
+            $('#write_ok_button<%= myStamps[i].id %>').click(function(){
+
+              if (chk_send == 0){
+              chk_send = 1;
+
+              var user_id = '<%= myStamps[i].user_id %>';
+              var market_name = '<%= myStamps[i].market_name %>';
+              var text=$('#review_textarea<%= myStamps[i].id %>').val();
+              var now = new Date();
+              function leadingZeros(n, digits){
+                var zero='';
+                n = n.toString();
+                if(n.length < digits){
+                  for(i = 0 ; i < digits - n.length; i++){
+                    zero += '0';
+                  }
+                }
+                return zero + n;
+              }
+              var post_date = leadingZeros(now.getYear()-100,2)+ '-'+
+                  leadingZeros(now.getMonth()+1,2)+'-' +
+                  leadingZeros(now.getDate(),2);
+
+              var sijang_name = '<%= myStamps[i].sijang_name %>';
+
+              if (!text) {
+                $('.alert_x').css('display', 'block');
+                $('.alert_content').html('리뷰를 입력해 주세요')
+                chk_send = 0;
+                  return false;
+                }
+
+              if(! starRate<%= myStamps[i].id %>) {
+                starRate<%= myStamps[i].id %> = 0;
+              }
+
+              var data = {
+                'market_name' : market_name,
+                'user_id' : user_id,
+                'date' : post_date,
+                'review' : text,
+                'sijang_name' : sijang_name,
+                'rate': starRate<%= myStamps[i].id %>
+              }
+              console.log(data);
+              $.ajax({
+                type: 'post',
+                url: '/review',
+                contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+                cache: false,
+                data: data,
+                datatype: 'json',
+                success: function(result) {
+                  chk_send = 0;
+                  if (result['result']=='success'){
+                    // console.log(result);
+                    $('.alert_o').css('display', 'block');
+                    $('.alert_content').html('리뷰 등록이 완료되었습니다')
+                    $('.alert_o').click(function () {
+                    // localStorage.setItem('reviewTab', '<%= myStamps[i].id %>');
+                    // localStorage.setItem('stamp_index_number', stamp_index);
+                    location.reload();
+                    });
+                  }
+                  else{
+                    console.log(result);
+                  }
+                },
+                error: function(error){
+                  location.reload();
+                }
+              });
+              }
+            else {
+                return false;
+            }
+
+            });
+
+
+            /*  스탬프 적립  */
+            $('#stamp_sj<%= myStamps[i].id %>').click(function () {
+              var count = 0; //쿠폰 클릭시 이벤트 발생
+              var result = 1;
+              $('#stamp_menu_sj<%= myStamps[i].id %>').hide(200);
+              $('#password_number_div_sj<%= myStamps[i].id %>').show(200);
+
+              shuffle(password_number_array_sj);
+
+              for (var i = 0; i < 10; i++) {
+                document.getElementsByClassName('password_number_sj <%= myStamps[i].id %>')[i].innerHTML = password_number_array_sj[i];
+               }
+
+               $('.password_back').click(function(){
+                          if(!count==0){
+                          number1 = number1.slice(0,-1);
+                          count--;
+                          $('.check<%= myStamps[i].id %>').eq(count).html('')
+                          }
+                        })
+              $('.password_number_sj').off().on('click',function(){
+                console.log('<%= myStamps[i].stamp_count %>')
+                number1 += $(this).html();
+                $('.check<%= myStamps[i].id %>').eq(count).html('*')
+                // document.getElementsByClassName('check<%= myStamps[i].id %>')[count].style.innerHTML='*';
+                // $('.check:eq(count)').html('*')
+                count++;
+
+                console.log(number1);
+                console.log("count"+count);
+                if(count == 4){
+                  count=0;
+                  $.ajax({
+                    type: 'POST',
+                    url: '/stamp_count_password/<%= myStamps[i].id %>',
+                    contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                    cache: false,
+                    dataType: 'json',
+                    success: function (result) {
+                      if (result['password'] == number1) {
+                        console.log(result['password']);
+                        // alert('비밀번호 일치');
+                        if (parseInt('<%= myStamps[i].stamp_standard %>') >= stamp_count<%= myStamps[i].id %> + 1) {
+                          var data = {
+                            'stamp_count': stamp_count<%= myStamps[i].id %> + 1,
+                          };
+                          console.log(data);
+                          $.ajax({
+                            type: 'POST',
+                            url: '/aboutstamp_count/<%= myStamps[i].id %>',
+                            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                            cache: false,
+                            dataType: 'json',
+                            data: data,
+                            success: function (result) {
+                              if (result['result'] == 'success') {
+                                $('.alert_o').css('display','block');
+                                $('.alert_content').html('스탬프가 추가 되었습니다')
+                                number1 = "";
+                                $('.check<%= myStamps[i].id %>').html('');
+                                console.log(result);
+                                stamp_count<%= myStamps[i].id %> = parseInt(result['new_stamp_count']);
+                                if (parseInt('<%= myStamps[i].stamp_standard %>') == 5) {
+                                  $('#fiveControls_sj<%= myStamps[i].id %>').css('display', 'table');
+                                  for (var i = 0; i < parseInt(stamp_count<%= myStamps[i].id %>); i++) {
+                                    var check = document.getElementsByClassName('five_sj <%= myStamps[i].id %>')[i];
+
+                                    check.style.backgroundImage = "url('/images/circle_logo.png')";
+                                    check.style.backgroundSize = 'cover';
+                                    // check.innerHTML = '';
+                                    // check.style.backgroundColor='black'
+
+                                  }
+                                }
+                                else if (parseInt('<%= myStamps[i].stamp_standard %>') == 10) {
+                                  $('#tenControls_sj<%= myStamps[i].id %>').css('display', 'table');
+                                  for (var i = 0; i < parseInt(stamp_count<%= myStamps[i].id %>); i++) {
+                                    var check = document.getElementsByClassName('ten_sj <%= myStamps[i].id %>')[i];
+
+                                    check.style.backgroundImage = "url('/images/circle_logo.png')";
+                                    check.style.backgroundSize = 'cover';
+                                    // check.innerHTML = '';
+                                    // check.style.backgroundColor='black'
+
+                                  }
+                                }
+                                $('#stamp_count_vertical<%= myStamps[i].id %>').html('<p class="count_stamp">'+ (stamp_count<%= myStamps[i].id %>) +' / <%= myStamps[i].stamp_standard %></p>');
+                                $('#stamp_menu_sj<%= myStamps[i].id %>').show(200);
+                                $('#password_number_div_sj<%= myStamps[i].id %>').hide(200);
+                                // $(window).attr('location', '/myStamp');
+                              }
+                            },
+                            error: function (error) {
+                              console.log('error');
+                            }
+                          });
+                        }
+                        else {
+                          var data = {
+                            'stamp_count': reset_stamp_count,
+                          };
+                          $.ajax({
+                            type: 'POST',
+                            url: '/reset_aboutstamp_count/<%= myStamps[i].id %>',
+                            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                            cache: false,
+                            dataType: 'json',
+                            data: data,
+                            success: function (result) {
+                              if (result['result'] == 'successs') {
+                                      $('.alert_o').css('display','block');
+                                      $('.alert_content').html('스탬프가 사용 되었습니다')
+                                number1 = "";
+                                stamp_count<%= myStamps[i].id %> = 0;
+                                if (parseInt('<%= myStamps[i].stamp_standard %>') == 5) {
+                                  $('#fiveControls_sj<%= myStamps[i].id %>').css('display', 'table');
+                                  for (var i = 0; i < 5; i++) {
+                                    var check = document.getElementsByClassName('five_sj <%= myStamps[i].id %>')[i];
+                                    check.style.backgroundColor = "rgb(202, 199, 199)";
+                                  }
+                                }
+                                else if (parseInt('<%= myStamps[i].stamp_standard %>') == 10) {
+                                  $('#tenControls_sj<%= myStamps[i].id %>').css('display', 'table');
+                                  for (var i = 0; i < 10; i++) {
+                                    var check = document.getElementsByClassName('ten_sj <%= myStamps[i].id %>')[i];
+                                    check.style.backgroundColor = "rgb(202, 199, 199)";
+                                  }
+                                }
+                                $('#stamp_count_vertical<%= myStamps[i].id %>').html('<p class="count_stamp">'+ (reset_stamp_count) +' / <%= myStamps[i].stamp_standard %></p>');
+                                $('#stamp_menu_sj<%= myStamps[i].id %>').show(200);
+                                $('#password_number_div_sj<%= myStamps[i].id %>').hide(200);
+                                $('.check<%= myStamps[i].id %>').html('');
+                                // $(window).attr('location', '/myStamp');
+                              }
+                            },
+                            error: function (error) {
+                              console.log('error');
+                            }
+                          });
+                        }
+                        //
+                      } else {
+                        console.log(result['password']);
+                        console.log(number1);
+                        $('.alert_x').css('display','block');
+                        $('.alert_content').html('비밀번호가 일치하지 않습니다.')
+                        number1 = "";
+                        $('.check<%= myStamps[i].id %>').html('');
+                      }
+                    },
+                    error: function (error) {
+                      console.log('error');
+                    }
+                  });
+                }
+              })
+            });
+
+
+            /* 비밀번호 키패드에서 취소 버튼 눌렀을 때 */
+            $('#password_cancel<%= myStamps[i].id %>').click(function(){
+              $('.check<%= myStamps[i].id %>').html('');
+              $('#password_number_div_sj<%= myStamps[i].id %>').hide(200);
+              $('#stamp_menu_sj<%= myStamps[i].id %>').show(200);
+            });
+
+
+            /*  발급 받은 스탬프 삭제  */
+            $("#delete_button_sj<%= myStamps[i].id %>").click(function() {
+              $('.alert_select').css('display','block');
+              $('.alert_content_select').html('스탬프를 삭제 하시겠습니까?')
+              $('.alert_select_ok').click(function(){
+              $('.alert_select').css('display','none');
+              // delete ajax
+              $.ajax({
+                type: 'post',
+                url: '/delete_stamp/<%= myStamps[i].id %>',
+                contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+                cache: false,
+                datatype: 'json',
+                success: function(result) {
+                  if (result['result']=='success'){
+                    $('.alert_o').css('display','block');
+                    $('.alert_content').html('스탬프 삭제가 완료되었습니다.')
+                    $('.alert_o').click(function(){
+                    location.reload();
+                    });
+                  }
+                },
+                error: function(error){
+                  // alert('mystamp');
+                }
+              });
+              });
+            });
+
+
+
+            </script>
+            <% } %>
+          </div>
+            <% } %>
+
+            <div id="nav_sj">
+                <div id="home_sj">
+                    <img src="/images/home.png" width="40%">
+                    <p>홈</p></div>
+                <div id="coupon_sj">
+                    <img src="/images/coupon.png" width="40%">
+                    <p>쿠폰</p></div>
+                <div id="location_sj">
+                    <img src="/images/location.png" width="40%">
+                    <p>주변 가맹점</p></div>
+                <div id="myStamp_sj">
+                    <img src="/images/stamp2.png" width="40%">
+                    <p id="nav_text">내 스탬프</p></div>
+                    <div id="logout">
+                        <img src="/images/logout.png" width="40%">
+                        <p>로그아웃</p>
+                    </div>
+            </div>
+            <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.3.3/js/swiper.min.js"></script> -->
+            <script>
+
+                      $('#home_sj').click(function () {
+                        location.href = "/main";
+                      })
+                      $('#location_sj').click(function () {
+                        location.href = "/location";
+                      })
+                      $('#coupon_sj').click(function () {
+                        location.href = "/coupon";
+                      })
+                      $('#logout').click(function () {
+                        $('.alert_select').css('display','block');
+                        $('.alert_content_select').html('로그아웃 하시겠습니까?')
+                        $('.alert_select_ok').click(function () {
+                          $('.alert_select').css('display', 'none');
+                                $(location).attr('href','/logout');
+                              })
+                          })
+
+                              $('.alert_x').click(function () {
+                                $(this).css('display', 'none')
+                              })
+                              $('.alert_o').click(function () {
+                                $(this).css('display', 'none')
+                              })
+                              $('.alert_select_cancel').click(function () {
+                                $('.alert_out').css('display', 'none')
+                                $('.alert_select').css('display', 'none')
+                              })
+                              var allHeight=document.body.clientHeight ;
+                              var allWidth=document.body.clientWidth ;
+                              var navHeight=allHeight*0.08;
+
+                              var topHeight=148;
+
+                                var passwordHeight = allHeight - navHeight - topHeight;
+                                var numberHeight = (passwordHeight - 105) / 4;
+                                var starWidth = (allWidth - 200) / 2;
+                                $('.star_upload').css('margin-left', starWidth + 'px')
+                                $('.password_number_div_sj').css('height', passwordHeight + 'px')
+                                $('.password_check').css('height', '75px').css('padding-bottom', '30px')
+                                $('.password_line_sj').css('height', numberHeight + 'px')
+                                $('.password_line_sj div').css('height', numberHeight + 'px')
+
+                                var nav_height = allHeight - (allHeight * 0.08)
+                                var alert_height = (allHeight / 2) - 75;
+                                $('.alert_x_content').css('top', alert_height + 'px');
+                                $('.alert_o_content').css('top', alert_height + 'px');
+                                $('#nav_sj').css('top', nav_height + 'px');
+
+
+
+                      </script>
+</body>
+</html>

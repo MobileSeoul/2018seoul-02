@@ -1,0 +1,124 @@
+@import url(https://cdn.rawgit.com/moonspam/NanumSquare/master/nanumsquare.css);
+select,filed,body, h1, h2, h3, h4, h5, h6, li, p, span, div input,textarea,label {font-family: 'NanumSquare',sans-serif;}
+
+#Goomap {
+	margin-top: 50px;
+	width: 100%;
+	display: none;
+	margin-bottom: 20%;
+}
+#search_result{
+	width: 100%;
+    list-style: none;
+    padding: 0px;
+    background-color: rgb(250, 250, 250);
+    margin: 0px;
+}
+#market_name_searching{
+	margin-top: 55px;
+}
+#search_result li{
+	border-bottom-style: inset;
+    height: 50px;
+    line-height: 50px;
+    border-width: 1.2px;
+    padding-left: 20px;
+}
+#Goomap_container {
+	height: 100%;
+	width: 100%;
+}
+
+.map_div{
+	width: 100%;
+}
+
+.Goomap_inner {
+	height: 32px;
+	width: 100%;
+	display: inline-flex;
+	text-align: center;
+	margin-top: 1%;
+	font-weight: 500;
+	font-size: 18px;
+}
+
+.Goomap_inner span{
+	width: 25%;
+}
+
+.menu{
+	display: inline-flex;
+	width: 100%;
+	height: 34px;
+	text-align: center;
+	margin-top: 4.5%;
+	color:#63dded;
+	font-size: 26px;
+	font-weight: 800;
+}
+
+.menu div{
+	width: 25%;
+	height: 100%;
+}
+
+#NewGoomap{
+	width: 90%;
+	margin-left: 5%;
+	background-color: #C0C0C0;
+	margin-top: 10px;
+	border-radius: 5px;
+}
+
+.Goomap_inner > span:hover {
+	font-weight: bold;
+	color: #FF69B4;
+	transition: 1s;
+}
+
+#NewGoomap > div > li {
+	list-style: none;
+	display: inline-flex;
+	color: white;
+	margin: 6px;
+}
+article{
+	margin-top: 12%;
+	margin-bottom: 15%;
+	height:100%;
+}
+
+/*  market_infor (시장 API 정보 뿌려주는 div ~ article)  */
+/*  애초에 생성이 늦기에 적용이 안됨!!! js로 모두 동적으로 처리해줘야함  */
+/*  어떤 css줄지 Test line 들  */
+
+#market_image{
+    width: 90%;
+    height: auto;
+    margin-left: 5% !important;
+}
+#market_image image{
+    width: 100%;
+    height: auto;
+}
+#market_infoText{
+	margin-bottom: 7%;
+}
+#modal_display{
+    font-size: 13px;
+    box-shadow: 5px 5px 3px #efefef;
+    width: 50%;
+    background-color: white;
+    border: double 1px transparent;
+    border-radius: 50px;
+    background-image: linear-gradient(white, white),
+ radial-gradient(circle at top left, #17ead9,#6078ea);
+    background-origin: border-box;
+    background-clip: content-box, border-box;
+    padding: 1px;
+	border: 0px;
+	font-weight: 200;
+    color: gray;
+    height: 32px;
+}

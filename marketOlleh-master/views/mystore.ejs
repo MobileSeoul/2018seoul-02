@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Page Title</title>
+    <meta name="viewport" content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0'>
+    <script src='/cordova/cordova.js'></script>
+    <script src='/cordova/cordova_plugins.js'></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/spin.js/2.3.2/spin.min.js"></script>
+    <script src="/javascripts/spin.js"></script>
+    <link rel="stylesheet" href="/stylesheets/swiper.min.css">
+    <!-- <script type='application/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.js'> -->
+    <!-- </script> -->
+    <link rel="stylesheet" type="text/css" href="/stylesheets/mystore.css" />
+    <!-- <script>
+        window.addEventListener('load', function () {
+            FastClick.attach(document.body);
+        }, false);
+    </script> -->
+
+</head>
+
+<script>
+  document.addEventListener("backbutton", onBackKeyDown, false);
+  function onBackKeyDown(e) {
+    e.preventDefault();
+      $('.alert_out').css('display', 'block');
+      $('.alert_content_select').html('앱을 종료하시겠습니까?')
+      $('.alert_select_ok_out').click(function () {
+       navigator.app.exitApp();
+      });
+  }
+</script>
+<!-- kakao map API (hw edit) -->
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=1f14a7f1512988347e7ffdd75ac7ab4c"></script>
+<body>
+        <div class="alert_x" style="display:none">
+            <div class="alert_x_content">
+                <div class="alert_image">
+                    <img src="/images/alert_x.png" width="70px" height="70px">
+                </div>
+                <div class="alert_content">
+                </div>
+            </div>
+        </div>
+
+        <div class="alert_o" style="display:none">
+            <div class="alert_o_content">
+                <div class="alert_image">
+                    <img src="/images/alert_o.png" width="70px" height="70px">
+                </div>
+                <div class="alert_content">
+                </div>
+            </div>
+        </div>
+        <div class="alert_select" style="display:none">
+            <div class="alert_o_content">
+                <div class="alert_content_select">
+                </div>
+                <div class="alert_select_cancel">
+                    취소
+                </div>
+                <div class="alert_select_ok">
+                    확인
+                </div>
+            </div>
+        </div>
+        <div class="alert_out"  style="display:none">
+                <div class="alert_o_content">
+                  <div class="alert_content_select">
+                  </div>
+                  <div class="alert_select_cancel">
+                    취소
+                  </div>
+                  <div class="alert_select_ok_out">
+                      확인
+                    </div>
+                </div>
+              </div>
+    <div id="menu_infor">
+
+        <div id="top_infor">
+            <div id="name_sj">
+                <p id="store_name_sj">
+                    <%= result1[0].market_name %>
+                </p>
+                <p id="market_name_sj">
+                    <%= result1[0].sijang_name %>
+                </p>
+            </div>
+            <div id="sns_sj">
+                <div id="good">
+                    <img class="top_image" id="noGood_Button_sj" src="/images/nolikeM.png" width="30px" height="30px">
+                    <p class="top_font" id="goodCount_sj">
+                        <%= result1[0].like_count %>
+                    </p>
+                </div>
+
+                <div id="face">
+
+                    <img class="top_image" src="/images/face.png" width="30px" height="30px">
+                    <p class="top_font">공유하기</p>
+                </div>
+                <script>
+                  $('#face').click(function() {
+                    var sijang_name = '<%= result1[0].sijang_name %>';
+                    var market_name = '<%= result1[0].market_name %>';
+                    var shareUrl = 'http://18.219.181.225:3000/share/' + sijang_name.replace(/ /gi, '%20') + '/' + market_name.replace(/ /gi, '%20');
+                    // window.plugins.socialsharing.shareViaFacebook(null, null, shareUrl, null, null);
+                    window.plugins.socialsharing.shareViaFacebook(null, null, shareUrl, function() {console.log('share ok')}, function(errormsg){
+              				//alert(errormsg)
+              				var goToPlayStoreConfirm = confirm('본 기능은 해당 기기에 페이스북 어플리케이션이 있어야 실행이 가능합니다. 앱을 설치하시겠습니까?');
+              	      if(goToPlayStoreConfirm) {
+              	        window.location.href = 'https://play.google.com/store/apps/details?id=com.facebook.katana';
+              	      }
+              			});
+                  });
+                </script>
+            </div>
+        </div>
+
+
+        <div id="bottom_infor">
+            <p class="go_slide" style="color: #63dded">상점정보</p>
+            <p class="go_slide">리뷰</p>
+            <p class="go_slide">리뷰작성</p>
+        </div>
+    </div>
+
+
+    <div class="swiper-container">
+        <div class="swiper-wrapper">
+
+            <div class="swiper-slide">
+                <div id="store_detail_sj">
+                    <div id="store_image" style="background: url('<%= result1[0].manager_image %>'); background-repeat: no-repeat; background-position: center center; background-size: 100%;"></div>
+                    <div id="introduce">
+                        <img src="/images/storeM.png" width="30px" height="30px">
+                        <div id="name">상점소개</div>
+                        <div id="intro_content">
+                            <%= result1[0].market_introduce %>
+                        </div>
+                    </div>
+                    <div id="map">
+                        <img src="/images/location3.png" width="30px" height="30px">
+                        <div id="name">위치</div>
+                    </div>
+                    <div id="manager_Map" style="width:90%;height:250px;margin-left: 5%; "></div>
+                </div>
+
+            </div>
+
+
+
+            <div class="swiper-slide">
+                <div id="store_review_sj">
+
+
+                    <% if(review) {%>
+                        <div class="review_rate">
+                            <div class="review_star">
+                                <% for(var k=0; k<avgRows.rateAvg; k++) { %>
+                                    <div>
+                                        <img class="star_yellow" src="/images/star_yellow.png" width="30px" height="30px">
+                                    </div>
+                                    <% } %>
+                                        <% for(var k=0; k<5-avgRows.rateAvg; k++) { %>
+                                            <div>
+                                                <img class="star_gray" src="/images/star_gray.png" width="30px" height="30px">
+                                            </div>
+                                            <% } %>
+                            </div>
+                            <div class="review_count">
+                                <p class="review_count_content" style="font-size: 20px;">
+                                    <%= avgRows.rateCnt %>
+                                </p>
+                                <p style="font-size: 20px; color: #9c9c9c;">개의 리뷰가 있습니다.</p>
+                            </div>
+                            <div class="intro">
+                                <p>
+                                    <%= result1[0].market_name %> 상점을 이용하는 고객들의 리뷰입니다.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="line"></div>
+                        <% for(var j=0; j<review.length; j++) { %>
+                            <% if(review[j].market_name == result1[0].market_name && review[j].sijang_name == result1[0].sijang_name) {%>
+                                <div class="review_div_sj">
+                                    <div class="review_star_customer">
+                                            <% if(review[j].user_id != '사장님') { %>
+                                                    <% for(var k=0; k<review[j].rate; k++) { %>
+                                                        <div>
+                                                            <img class="star_yellow_customer" src="/images/star_yellow.png" width="20px" height="20px">
+                                                        </div>
+                                                    <% } %>
+                                                    <% for(var k=0; k<5-review[j].rate; k++) { %>
+                                                        <div>
+                                                            <img class="star_gray_customer" src="/images/star_gray.png" width="20px" height="20px">
+                                                        </div>
+                                                    <% } %>
+                                                <% } else {%>
+                                                    <div>
+                                                        <img class="star_gray_customer" src="/images/logo_with_text_small.png" width="60px" height="15px">
+                                                    </div>
+                                                <% } %>
+                                    </div>
+                                    <div class="review_content_sj">
+                                        <div class="review_content_id_sj" id='review_content_id_sj<%= review[j].id %>'>
+                                            <% if(review[j].provider == 'kakao') { %>
+                                                <%= review[j].username %>
+                                            <% } else { %>
+                                                <script>
+                                                    var temp = '<%= review[j].user_id %>';
+                                                    var secret = '***';
+                                                    var l = temp.length;
+                                                    var f = l - 3;
+                                                    //console.log(f);
+                                                    //console.log(l);
+                                                    var temp2 = temp.substring(0, f);
+                                                    var result3 = temp2.concat(secret);
+                                                    if (result3 == '***') {
+                                                        $('#review_content_id_sj<%= review[j].id %>').html('사장님');
+                                                    } else {
+                                                        $('#review_content_id_sj<%= review[j].id %>').html(result3);
+                                                    }
+                                                </script>
+                                            <% } %>
+                                        </div>
+                                        <div class="review_content_date_sj">
+                                            <%= review[j].date %>
+                                        </div>
+                                    </div>
+                                    <p>
+                                        <%= review[j].review %>
+                                    </p>
+                                    <div class="line"></div>
+                                </div>
+                                <% } %>
+                                    <% } %>
+                                        <% } else {%>
+                                            <div class="review_div_sj">
+                                                <div class="review_star_customer">
+                                                    <% for(var t=0; t<5; t++) { %>
+                                                        <div>
+                                                            <img class="star_gray_customer" src="/images/star_gray.png" width="30px" height="30px">
+                                                        </div>
+                                                        <% } %>
+                                                </div>
+                                                <p style="font-size: 20px; color: #9c9c9c;">작성된 리뷰가 없습니다.</p>
+                                            </div>
+                                            <div class="intro">
+                                                    <p>
+                                                        <%= result1[0].market_name %> 상점을 이용하는 고객들의 리뷰입니다.
+                                                    </p>
+                                                </div>
+                                                <div class="line"></div>
+                                            <% } %>
+
+                </div>
+            </div>
+            <div class="swiper-slide">
+                <div id="review_write_sj">
+                    <div class='review_write_sj'>
+                        <div id="write_div">리뷰 작성</div>
+                        <textarea id="review_textarea_sj" rows="6"></textarea>
+                        <div class=review_mente>리뷰로 고객들과 함께 소통해보세요</div>
+                        <button id="write_ok_button">등록</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="swiper-scrollbar"></div>
+    </div>
+
+    <div id="nav_sj">
+        <div id="home">
+            <img src="/images/home.png" width="40%">
+            <p>홈</p>
+        </div>
+        <div id="coupon_sj">
+            <img src="/images/coupon.png" width="40%">
+            <p>쿠폰</p>
+        </div>
+        <div id="myStamp_sj">
+            <img src="/images/stamp.png" width="40%">
+            <p>스탬프</p>
+        </div>
+        <div id="mystore_sj">
+            <img src="/images/mystore2.png" width="40%">
+            <p id="nav_text">내 상점</p>
+        </div>
+        <div id="logout">
+            <img src="/images/logout.png" width="40%">
+            <p>로그아웃</p>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.3.3/js/swiper.min.js"></script>
+
+    <!-- ▼ hw edit; map javascirpt -->
+    <script type="text/javascript">
+      var markersGPS = []; // (need gps) 지도에 표시된 마커 객체를 가지고 있을 배열입니다
+
+      // 마커를 생성하고 지도위에 표시하는 함수입니다
+      function addMarkerGPS(position, mapObj) {
+
+          // 마커를 생성합니다
+          var marker = new daum.maps.Marker({
+              position: position
+          });
+
+          // 마커가 지도 위에 표시되도록 설정합니다
+          marker.setMap(mapObj);
+
+          // 생성된 마커를 배열에 추가합니다
+          markersGPS.push(marker);
+      }
+    </script>
+
+    <script>
+        function gettingMap() {
+
+            $.ajax({
+                url: "/searching/marketList",
+                dataType: 'json',
+                type: 'POST',
+                contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                data: {
+                    "name": '<%= result1[0].sijang_name %>',
+                    "market_name": '<%= result1[0].market_name %>'
+                },
+                success: function (result) {
+                    if (result.rows.length > 0) {
+
+                        // manager get gps ~ display map, marker!
+                        // tempLo는 result의 location -> 위도 경도값 가짐
+                        var temp = result.rows[0].market_location;
+                        var tempLo = temp.split(', ')
+                        console.log(tempLo);
+
+                        // 지도를 표시할 div (id)
+                        var mapContainer = document.getElementById('manager_Map'),
+                            mapOption = {
+                                center: new daum.maps.LatLng(parseFloat(tempLo[0]), parseFloat(tempLo[1])), // 지도의 중심좌표
+                                level: 4 // 지도의 확대 레벨
+                            };
+                        var manager_Map = new daum.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+                        // 마커 하나를 지도위에 표시합니다
+                        addMarkerGPS(new daum.maps.LatLng(parseFloat(tempLo[0]), parseFloat(tempLo[1])), manager_Map);
+                        manager_Map.relayout();
+                    } else {
+                        console.log("시장이름 존재하지 않음");
+                    }
+                },
+                error: function (e) {
+                    alert("main.ejs");
+                    console.log('process error : ', e);
+                }
+            }); // ajax
+        }
+
+        var allHeight = document.body.clientHeight;
+        var nav_height = allHeight - (allHeight * 0.08)
+        var alert_height = (allHeight / 2) - 75;
+        $('.alert_x_content').css('top', alert_height + 'px');
+        $('.alert_o_content').css('top', alert_height + 'px');
+        $('#nav_sj').css('top', nav_height + 'px');
+        var swiper = new Swiper('.swiper-container', {
+            autoHeight: true,
+            scrollbar: {
+                el: '.swiper-scrollbar',
+                hide: true,
+            },
+        });
+        $('.go_slide').click(function (e) {
+                var this_index = $(this).index();
+                e.preventDefault();
+                $('.go_slide').css('color','black');
+                $('.go_slide').eq(this_index).css('color','#63dded');
+                swiper.slideTo(this_index, 500, false);
+            });
+
+        swiper.on('slideChangeTransitionStart', function () {
+            var active=swiper.activeIndex;
+            $('.go_slide').css('color','black');
+            $('.go_slide').eq(active).css('color','#63dded');
+        });
+        $('#home').click(function () {
+            location.href = "/mainManager";
+        })
+        $('#coupon_sj').click(function () {
+            location.href = "/couponManager";
+        })
+        $('#myStamp_sj').click(function () {
+            location.href = "/mystampManager";
+        })
+        $('#logout').click(function () {
+            $('.alert_select').css('display', 'block');
+            $('.alert_content_select').html('로그아웃 하시겠습니까?')
+            $('.alert_select_ok').click(function () {
+                $('.alert_select').css('display', 'none');
+                $(location).attr('href', '/logoutmanager');
+            })
+        })
+        var doubleSubmitFlag = false;
+        function doubleSubmitCheck() {
+            if (doubleSubmitFlag) {
+                return doubleSubmitFlag;
+            } else {
+                doubleSubmitFlag = true;
+                return false;
+            }
+        }
+        $('#write_ok_button').click(function () {
+            var user_id = '사장님';
+            var market_name = '<%= result1[0].market_name %>';
+            var sijang_name = '<%= result1[0].sijang_name %>';
+            var text = $('#review_textarea_sj').val();
+            var now = new Date();
+            function leadingZeros(n, digits) {
+                var zero = '';
+                n = n.toString();
+                if (n.length < digits) {
+                    for (i = 0; i < digits - n.length; i++) {
+                        zero += '0';
+                    }
+                }
+                return zero + n;
+            }
+            var post_date = leadingZeros(now.getYear() - 100, 2) + '-' +
+                leadingZeros(now.getMonth() + 1, 2) + '-' +
+                leadingZeros(now.getDate(), 2);
+            if (!text) {
+                $('.alert_x').css('display', 'block');
+                $('.alert_content').html('리뷰를 입력해 주세요')
+                return false;
+            }
+            if (doubleSubmitCheck()) return;
+            var data = {
+                'market_name': market_name,
+                'user_id': user_id,
+                'date': post_date,
+                'review': text,
+                'sijang_name': sijang_name
+            }
+            console.log(data);
+            $.ajax({
+                type: 'post',
+                url: '/review_manager',
+                contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+                cache: false,
+                data: data,
+                datatype: 'json',
+                success: function (result) {
+                    if (result['result'] == 'success') {
+                        // console.log(result);
+                        $('.alert_o').css('display', 'block');
+                        $('.alert_content').html('리뷰 등록이 완료되었습니다')
+                        $('.alert_o').click(function () {
+                            location.reload();
+                        });
+                    }
+                    else {
+                        console.log(result);
+                        alert('mystore');
+                    }
+                },
+                error: function (error) {
+                    alert('mystore');
+                    location.reload();
+                }
+            });
+        })
+        $('.alert_x').click(function () {
+                $(this).css('display', 'none')
+            })
+            $('.alert_o').click(function () {
+                $(this).css('display', 'none')
+            })
+            $('.alert_select_cancel').click(function () {
+                $('.alert_out').css('display', 'none')
+                $('.alert_select').css('display', 'none')
+            })
+        // $('#store_image').css({ "background": "url(/images/market3.jpg)", 'background-repeat': 'no-repeat', 'background-position': 'center center' });
+
+        // hw eidt; get kakao map in mystore
+
+        // refer 306 line
+
+        gettingMap();
+    </script>
+    <!-- <script src="/javascripts/mystore.js"></script> -->
+
+
+</body>
+
+</html>

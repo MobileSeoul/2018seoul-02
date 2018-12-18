@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Page Title</title>
+    <meta name="viewport" content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0'>
+    <link rel="stylesheet" type="text/css" href="//cdn.rawgit.com/innks/NanumSquareRound/master/nanumsquareround.min.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="/stylesheets/store_infor.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="/stylesheets/main.css" />
+    <link rel="stylesheet" href="/stylesheets/swiper.min.css">
+    <script src='/cordova/cordova.js'></script>
+    <script src='/cordova/cordova_plugins.js'></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/spin.js/2.3.2/spin.min.js"></script>
+    <script src="/javascripts/spin.js"></script>
+    <script type='application/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.js'></script>
+    <link rel="stylesheet" type="text/css" media="screen" href="/stylesheets/searching.css" />
+
+    <!--     <script>
+        window.addEventListener('load', function () {
+            FastClick.attach(document.body);
+        }, false);
+    </script> -->
+
+</head>
+
+<script>
+  document.addEventListener("backbutton", onBackKeyDown, false);
+  function onBackKeyDown(e) {
+    e.preventDefault();
+      $('.alert_out').css('display', 'block');
+      $('.alert_content_select').html('앱을 종료하시겠습니까?')
+      $('.alert_select_ok_out').click(function () {
+       navigator.app.exitApp();
+      });
+  }
+</script>
+
+<body>
+    <div class="alert_x" style="display:none">
+        <div class="alert_x_content">
+          <div class="alert_image">
+            <img src="/images/alert_x.png" width="70px" height="70px" >
+          </div>
+          <div class="alert_content">
+          </div>
+        </div>
+      </div>
+
+      <div class="alert_o" style="display:none">
+          <div class="alert_o_content">
+            <div class="alert_image">
+              <img src="/images/alert_o.png" width="70px" height="70px" >
+            </div>
+            <div class="alert_content">
+            </div>
+          </div>
+        </div>
+
+          <div class="alert_select"  style="display:none">
+              <div class="alert_o_content">
+                <div class="alert_content_select">
+                </div>
+                <div class="alert_select_cancel">
+                  취소
+                </div>
+                <div class="alert_select_ok">
+                    확인
+                  </div>
+              </div>
+            </div>
+            <div class="alert_gps"  style="display:none">
+                    <div class="alert_o_content">
+                      <div class="alert_content_select_gps">
+                      </div>
+                      <div class="alert_select_cancel_gps">
+                        취소
+                      </div>
+                      <div class="alert_select_ok_gps">
+                          재시도
+                        </div>
+                    </div>
+                  </div>
+            <div class="alert_out"  style="display:none">
+                    <div class="alert_o_content">
+                      <div class="alert_content_select">
+                      </div>
+                      <div class="alert_select_cancel">
+                        취소
+                      </div>
+                      <div class="alert_select_ok_out">
+                          확인
+                        </div>
+                    </div>
+                  </div>
+
+    <div id="text_logo">
+        <!-- <div id="verti"> -->
+        <img id="inline_logo" src="/images/inline-logo.png" width="19%" height="auto">
+        <!-- </div> -->
+        <div id="Searching">
+            <div id="verti">
+                <div id="vertical_helper">
+                    <div id="searching_input">
+                        <input type="text" id="search_value">
+                        <img src="/images/search.png" value="검색" id="searchingButton" width="35px" height="35px">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="back_div">
+        <img id="tableControl" src="/images/backButton_blue.png" width="23px" height="23px">
+    </div>
+    <div id="back_div_near">
+            <img id="tableControl" src="/images/backButton_blue.png" width="23px" height="23px">
+        </div>
+
+    <div id="navControlButton">
+        <div id="verti-helper">
+            <img src="/images/search3.png" width="14px" height="14px">&nbsp지역별로 검색
+        </div>
+    </div>
+
+    <!-- 검색 결과 노출 되는 본문, article -->
+    <article>
+        <ol id="search_result"></ol>
+    </article>
+
+    <div id="Goomap">
+        <div id="Goomap_container">
+
+            <div class="menu">
+                <div>ㄱ</div>
+            </div>
+            <div class="map_div">
+                <div class="Goomap_inner">
+                    <span>강남구</span>
+                    <span>강북구</span>
+                    <span>관악구</span>
+                    <span>구로구</span>
+                </div>
+            </div>
+
+            <div class="map_div">
+                <div class="Goomap_inner">
+                    <span>강동구</span>
+                    <span>강서구</span>
+                    <span>광진구</span>
+                    <span>금천구</span>
+                </div>
+            </div>
+
+            <div class="menu">
+                <div>ㄴ</div>
+                <div>ㄷ</div>
+            </div>
+            <div class="map_div">
+                <div class="Goomap_inner">
+                    <span>노원구</span>
+                    <span>도봉구</span>
+                    <span>동대문구</span>
+                    <span>동작구</span>
+                </div>
+            </div>
+
+            <div class="menu">
+                <div>ㅁ</div>
+                <div>ㅅ</div>
+            </div>
+            <div class="map_div">
+                <div class="Goomap_inner">
+                    <span>마포구</span>
+                    <span>서대문구</span>
+                    <span>서초구</span>
+                    <span>성동구</span>
+                </div>
+            </div>
+
+            <div class="map_div">
+                <div class="Goomap_inner">
+                    <span> </span>
+                    <span>성북구</span>
+                    <span>송파구</span>
+                    <span> </span>
+                </div>
+            </div>
+
+            <div class="menu">
+                <div>ㅇ</div>
+                <div style="margin-left: 25%">ㅈ</div>
+            </div>
+            <div class="map_div">
+                <div class="Goomap_inner">
+                    <span>양천구</span>
+                    <span>용산구</span>
+                    <span>종로구</span>
+                    <span>중구</span>
+                </div>
+            </div>
+            <div class="map_div">
+                <div class="Goomap_inner">
+                    <span>영등포구</span>
+                    <span>은평구</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="NewGoomap"></div>
+
+    <!-------------------- KAKAO MAP API ---------------------->
+    <div id="market_infor">
+        <!-- searching_marketinfo.js 필 참 -->
+        <article id="market_infoText"></article>
+
+        <h3>위치</h3>
+        <div id="map" style="width:90%;height:250px;margin-left: 5%; "></div><div class="line"></div>
+        <div id="hot_store_market">
+            <h3>인기 상점</h3>
+            <div id="hot_store_list_market">
+                <div>
+                    <img src="/images/buffering-dial.gif" id="buffering_img" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=1f14a7f1512988347e7ffdd75ac7ab4c"></script>
+    <!-------------------- KAKAO MAP API ---------------------->
+
+    <div id="aaa">
+        <h3>내 스탬프</h3>
+        <div id="myStamp">
+            <div class="swiper-container s1">
+                <div class="swiper-wrapper">
+                    <!-- <label>내 스탬프</label> -->
+                    <% if(myStamps) { %>
+                        <% for(var i=0; i<myStamps.length; i++) { %>
+                            <div class="swiper-slide swiper1" id='stamp<%= myStamps[i].id %>'>
+                                <div class="store_market_name">
+                                    <%= myStamps[i].market_name %>
+                                </div>
+                                <div class="my_stamp_count">
+                                    <div class="stamp_count_vertical">
+                                        <p class="count_stamp">
+                                            <%= myStamps[i].stamp_count %>&nbsp/
+                                                <%= myStamps[i].stamp_standard %>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="stamp_market">
+                                        <p class="deadline">
+                                            <%= myStamps[i].sijang_name %>
+                                        </p>
+                                        <div class="logo_image">
+                                        <img src="/images/inline-logo.png" width="75%" height="auto" style="padding-top: 19%;padding-left: 16%;">
+                                    </div>
+                                </div>
+                            </div>
+                            <% } %>
+                                <% } else { %>
+                                    <div class='no_stamp'>
+                                        <div id="no_stamp_verti">발급받은 스탬프가 없습니다.</div>
+                                    </div>
+                                    <% } %>
+                </div>
+                <div class="swiper-pagination"></div>
+            </div>
+        </div>
+        <div class="line">
+
+        </div>
+        <h3 id="user_name">
+            <%= user.username %>님 근처 시장
+        </h3>
+        <!-- <input type="button" id="user_nearMarket" value="새로고침" /> -->
+        <div id="near_market">
+            <img src="/images/buffering-dial.gif" id="buffering_img" />
+            <!-- 아래 태그가 innerHTML 프로퍼티로 동적생성되어 삽임됨 / 코르도바, 자스, 제이쿼리 사용
+            <div class="near_market_list">
+                <div class="market_pic">
+                    <img src="/images/market2.jpg" width="100%" height="85px">
+                </div>
+                <div class="near_market_name">광장시장</div>
+                <div class="distance">7.9km</div>
+            </div> -->
+        </div>
+
+        <div class="line"></div>
+
+        <div id="hot_store">
+            <h3>서울시 좋아요순 상점</h3>
+            <% for(var i=0; i<=18; i+=2) { %>
+              <div class="hot_store_list">
+                  <div class="hot_store_detail">
+                      <div>
+                          <img src="<%= market[i].manager_image %>" width="100%" height="130px">
+                      </div>
+                      <div class="good_store_name"><%= market[i].market_name %></div>
+                      <div class="good_market_name"><%= market[i].sijang_name %></div>
+                      <div class="good_count">
+                          <img src="/images/good.png" width="17px" height="17px" style="margin-right: 3px;">
+                          <p><%= market[i].like_count %></p>
+                      </div>
+                  </div>
+
+                  <div class="hot_store_detail">
+                      <div>
+                          <img src="<%= market[i+1].manager_image %>" width="100%" height="130px">
+                      </div>
+                      <div class="good_store_name"><%= market[i+1].market_name %></div>
+                      <div class="good_market_name"><%= market[i+1].sijang_name %></div>
+                      <div class="good_count">
+                          <img src="/images/good.png" width="17px" height="17px" style="margin-right:3px;">
+                          <p><%= market[i+1].like_count %></p>
+                      </div>
+                  </div>
+              </div> <!-- hot_store_list 닫는 div -->
+              <!-- <div class="line_light"></div> -->
+            <% } %>
+        </div>
+    </div>
+    <!--△─────────────────────aaa 태그 묶음 끝────────────────────△-->
+
+    <!-- ▽ STORE INFO // store_infor.ejs 참조 ▽ -->
+
+    <div id="store_infor">
+
+        <div id="menu_infor">
+                <div id="top_infor">
+                  <div id="name_sj">
+                    <p id="store_name_sj">
+                    </p>
+                    <p id="market_name_sj">
+                    </p>
+                  </div>
+                  <div id="sns_sj">
+                    <div id="good">
+                        <img class='top_image' id="noGood_Button_sj" src="/images/nolikeM.png" width="30px" height="30px">
+                        <img class='top_image' id="yesGood_Button_sj" src="/images/likeM.png" width="30px" height="30px" style='display: none;'>
+                        <!-- 좋아요 개수 출력 부분 [ like_count ] -->
+                        <p class="top_font" id="goodCount_sj"></p>
+                    </div>
+
+                    <!-- <div class="face">
+
+                      <img class="top_image" src="/images/face.png" width="30px" height="30px">
+                      <p class="top_font">공유하기</p>
+                    </div> -->
+                  </div>
+                </div>
+                <div id="bottom_infor">
+                  <p class="go_slide" style="color:#63dded;">스탬프</p>
+                  <p class="go_slide">상점정보</p>
+                  <p class="go_slide">리뷰</p>
+                </div>
+        </div>
+
+        <div class="swiper-container s2">
+                <div class="swiper-wrapper">
+                        <div class="swiper-slide">
+        <div id="stamp_menu_sj">
+            <div class="stamp_sj">
+
+                <div class="tenControls_sj">
+                    <div class="tenStamp_sj">
+
+                        <div class="tenStamp_top_sj">
+                            <div class="ten_sj">
+                                <p>1</p>
+                            </div>
+                            <div class="ten_sj">
+                                <p>2</p>
+                            </div>
+                            <div class="ten_sj">
+                                <p>3</p>
+                            </div>
+                            <div class="ten_sj">
+                                <p>4</p>
+                            </div>
+                            <div class="ten_sj">
+                                <p>5</p>
+                            </div>
+                        </div>
+
+                        <div class="tenStamp_bottom_sj">
+                            <div class="ten_sj">
+                                <p>6</p>
+                            </div>
+                            <div class="ten_sj">
+                                <p>7</p>
+                            </div>
+                            <div class="ten_sj">
+                                <p>8</p>
+                            </div>
+                            <div class="ten_sj">
+                                <p>9</p>
+                            </div>
+                            <div class="ten_sj">
+                                <p>10</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="fiveControls_sj">
+                    <div class="fiveStamp_sj">
+                        <div class="five_sj">
+                            <p>1</p>
+                        </div>
+                        <div class="five_sj">
+                            <p>2</p>
+                        </div>
+                        <div class="five_sj">
+                            <p>3</p>
+                        </div>
+                        <div class="five_sj">
+                            <p>4</p>
+                        </div>
+                        <div class="five_sj">
+                            <p>5</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- [ 스탬프 기준, 보상 ] 표현해주는 div-->
+            <div id="stamp_infor_sj">
+            </div>
+            <button class="button_sj">다운받기</button>
+        </div>
+        </div>
+
+        <div class="swiper-slide">
+        <div class="store_detail_sj">
+                <div class="store_image"></div>
+                <div id="introduce">
+                    <img src="/images/storeM.png" width="30px" height="30px">
+                    <div class="name">상점소개</div>
+                    <div id="intro_content"></div>
+                </div>
+                <div id="map">
+                        <img src="/images/location3.png" width="30px" height="30px">
+                        <div class="name">위치</div>
+                </div>
+                <div id="manager_Map" style="width:90%;height:250px;margin-left: 5%; "></div>
+                <!-- <img src="/images/han.png" width="80%" style="margin-left: 10%;margin-top: 5%;"> -->
+            </div>
+
+
+
+        </div>
+
+        <!-- [ 상점 리뷰 ] div ~ review table 참조 -->
+        <div class="swiper-slide">
+        <div class="store_review_sj">
+
+            </div>
+        </div>
+    </div>
+
+        <div class="swiper-scrollbar"></div>
+        </div>
+
+    </div>
+    <!-- △ STORE INFO // store_infor.ejs 참조 △ -->
+
+    <div id="nav_sj">
+        <div id="home_sj">
+            <img src="/images/home2.png" width="40%">
+            <p id="nav_text">홈</p>
+        </div>
+        <div id="coupon_sj">
+            <img src="/images/coupon.png" width="40%">
+            <p>쿠폰</p>
+        </div>
+        <div id="location_sj">
+            <img src="/images/location.png" width="40%">
+            <p>주변 가맹점</p>
+        </div>
+        <div id="myStamp_sj">
+            <img src="/images/stamp.png" width="40%">
+            <p>내 스탬프</p>
+        </div>
+        <div id="logout">
+            <img src="/images/logout.png" width="40%">
+            <p>로그아웃</p>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.3.3/js/swiper.min.js"></script>
+    <script>
+            var allHeight = document.body.clientHeight;
+            var nav_height = allHeight - (allHeight * 0.08)
+            var alert_height = (allHeight / 2) - 75;
+            $('.alert_x_content').css('top', alert_height + 'px');
+            $('.alert_o_content').css('top', alert_height + 'px');
+            $('#nav_sj').css('top', nav_height + 'px');
+        $('#myStamp_sj').click(function () {
+            location.href = "/myStamp";
+        })
+        $('#coupon_sj').click(function () {
+            location.href = "/coupon";
+        })
+        $('#location_sj').click(function () {
+         location.href = "/location";
+        })
+            $('#logout').click(function () {
+                $('.alert_select').css('display', 'block');
+                $('.alert_content_select').html('로그아웃 하시겠습니까?')
+                $('.alert_select_ok').click(function () {
+                    $('.alert_select').css('display', 'none');
+                    $(location).attr('href', '/logout');
+                })
+            })
+        var swiper = new Swiper('.s1', {
+            slidesPerView: 'auto',
+            centeredSlides: true,
+            spaceBetween: 10,
+            pagination: {
+                el: '.swiper-pagination',
+                dynamicBullets: true,
+                clickable: true,
+            },
+            on: {
+                init: function () {
+                    $('.swiper-slide-active').css('height', '100%')
+                    $('.swiper-slide-active').css('margin-top', '0%')
+                },
+            }
+        });
+        swiper.on('slideChangeTransitionStart', function () {
+            $(".swiper-slide-active").animate({
+                height: '100%',
+                marginTop: '0%'
+            }, 100);
+            $(".swiper-slide-next").animate({
+                height: '85%',
+                marginTop: '3.5%'
+            }, 100);
+            $(".swiper-slide-prev").animate({
+                height: '85%',
+                marginTop: '3.5%'
+            }, 100);
+        });
+        var swiper2 = new Swiper('.s2', {
+            initialSlide: 0,
+            autoHeight: true,
+            observer: true,
+            observeParents: true,
+            scrollbar: {
+                el: '.swiper-scrollbar',
+                hide: true,
+            },
+        });
+        $('.go_slide').click(function (e) {
+                var this_index = $(this).index();
+                e.preventDefault();
+                $('.go_slide').css('color','black');
+                $('.go_slide').eq(this_index).css('color','#63dded');
+                swiper2.slideTo(this_index, 500, false);
+            });
+
+        swiper2.on('slideChangeTransitionStart', function () {
+            var active=swiper2.activeIndex;
+            $('.go_slide').css('color','black');
+            $('.go_slide').eq(active).css('color','#63dded');
+        });
+
+    </script>
+
+
+    <!-------------------- KAKAO MAP API ---------------------->
+    <script type="text/javascript">
+         // 스크롤 조절
+        window.scrollTo(0, 0);
+        // 전역 변수
+        var user_id = '<%= user.id %>';
+        var markers = []; // (No gps) 지도에 표시된 마커 객체를 가지고 있을 배열입니다
+        var markersGPS = []; // (need gps) 지도에 표시된 마커 객체를 가지고 있을 배열입니다
+
+        // 지도를 표시할 div (id)
+        var mapContainer = document.getElementById('map'),
+            mapOption = {
+                center: new daum.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
+                level: 4 // 지도의 확대 레벨
+            };
+        var map = new daum.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+
+        // 마커를 생성하고 지도위에 표시하는 함수입니다
+        function addMarker(position) {
+            // 마커를 생성합니다
+            var marker = new daum.maps.Marker({
+                position: position
+            });
+            // 마커가 지도 위에 표시되도록 설정합니다
+            marker.setMap(map);
+            // 생성된 마커를 배열에 추가합니다
+            markers.push(marker);
+        }
+
+        // 마커를 생성하고 지도위에 표시하는 함수입니다
+        function addMarkerGPS(position, mapObj) {
+
+            // 마커를 생성합니다
+            var marker = new daum.maps.Marker({
+                position: position
+            });
+
+            // 마커가 지도 위에 표시되도록 설정합니다
+            marker.setMap(mapObj);
+
+            // 생성된 마커를 배열에 추가합니다
+            markersGPS.push(marker);
+        }
+
+        // 배열에 추가된 마커들을 지도에 표시하거나 삭제하는 함수
+        function setMarkers(map) {
+            for (var i = 0; i < markers.length; i++) {
+                markers[i].setMap(map);
+            }
+        }
+        function relayout() {
+            // 지도를 표시하는 div 크기를 변경한 이후 지도가 정상적으로 표출되지 않을 수도 있습니다
+            // 크기를 변경한 이후에는 반드시  map.relayout 함수를 호출해야 합니다
+            // window의 resize 이벤트에 의한 크기변경은 map.relayout 함수가 자동으로 호출됩니다
+            map.relayout();
+        }
+        function changeCenter(mapLat, mapLng) {
+            var moveLatLon = new daum.maps.LatLng(mapLat, mapLng);
+            relayout();
+            // 입력받은 좌표에 마커 추가
+            addMarker(moveLatLon);
+            // 지도 중심을 이동 시킵니다
+            map.setCenter(moveLatLon);
+            map.setLevel(4);
+        } // changeCenter
+
+        // 서울시 좋아요순 상점
+        $('.hot_store_detail').click(function (event) {
+            // 인기 상점 찾기
+            $.ajax({
+                url: "/searching/marketList",
+                dataType: 'json',
+                type: 'POST',
+                contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                data: {
+                    "name": this.childNodes[5].innerText,
+                    "market_name": this.childNodes[3].innerText
+                },
+                success: function (result) {
+                    if (result.rows.length > 0) {
+                        document.getElementById('aaa').style.display = "none";
+                        document.getElementById('text_logo').style.display = "none";
+                        $('#navControlButton').css('display', 'none');
+                        document.getElementById('back_div').style.display = "block";
+                        // searching_marketinfo.js 참조
+                        // 기본 틀과 UI, display설정 포함
+                        managerInfoLi_event(result.rows[0]);
+                    } else {
+                        console.log("시장이름 존재하지 않음");
+                    }
+                },
+                error: function (e) {
+                    alert("main.ejs");
+                    console.log('process error : ', e);
+                }
+            }); // ajax
+        }); // click event
+        $('.alert_x').click(function () {
+                $(this).css('display', 'none')
+            })
+            $('.alert_o').click(function () {
+                $(this).css('display', 'none')
+            })
+            $('.alert_select_cancel').click(function () {
+                $('.alert_out').css('display', 'none')
+                $('.alert_gps').css('display', 'none')
+                $('.alert_select').css('display', 'none')
+                $('.alert_select_ok').off();
+            });
+            $('.alert_select_cancel_gps').click(function () {
+                $('.alert_select').css('display', 'none')
+                $('.alert_out').css('display', 'none')
+                $('.alert_gps').css('display', 'none')
+                $('.alert_select_ok_gps').off();
+            });
+    </script>
+    <!-------------------- KAKAO MAP API ---------------------->
+    <script type='text/javascript' src='javascripts/searching.js'></script>
+    <script type='text/javascript' src='javascripts/searching_marketinfo.js'></script>
+    <!-- HW EDIT 코르도바 + 자바스크립트 + 태그제어 -->
+    <script src="/javascripts/cordova_getgps.js"></script>
+    <script type="text/javascript">
+        /* ☆순서☆ : getNearMarket -> nearCounting -> near_market_click_event */
+
+        // 아래 함수 실행시 전역변수 window.myLat, window.myLng 값 = 위도 경도 값 저장
+        // window.seoulApp.SignUpgetGPS();
+        // 위도 경도의 순수 거리값 보다는 10진수화 된 값을 가지고
+        // 정렬 먼저해봄 (실제 거리 구하시는 식 X )
+        function nearCounting(marketList) {
+
+            var SortingMarket = new Array();
+
+            // marketList는 market DB의 시장을 전부 가져온 row값
+            for (var i = 0; i < marketList.length; i++) {
+                // 각 시장의 위도, 경도 값들을 전역 위도, 경도 값과 비교
+                var tempX = window.myLat - marketList[i].coordinateX;
+                var tempY = window.myLng - marketList[i].coordinateY;
+                var tempResult = Math.pow(tempX, 2) + Math.pow(tempY, 2);
+                tempResult = Math.sqrt(tempResult);
+
+                // key : value 형태 object로 마켓리스트를 저장
+                // 하지만 imgurl이 없으면 디폴트 경로 설정
+                if (!marketList[i].imgurl) {
+                    SortingMarket[i] = {
+                        'imgurl' : '/images/market_default.jpg',
+                        'marketName': marketList[i].name,
+                        'marketDistance': tempResult
+                    };
+                } else {
+                    SortingMarket[i] = {
+                        'imgurl' : marketList[i].imgurl,
+                        'marketName': marketList[i].name,
+                        'marketDistance': tempResult
+                    };
+                }
+
+            } // for
+
+            SortingMarket.sort(function(a, b) {
+                return a.marketDistance - b.marketDistance;
+            });
+
+            var tempString = "";
+            for (var i = 0; i < 3; i++) {
+                tempString += '<div class="near_market_list">';
+                tempString += '<div class="market_pic">';
+                tempString += '<img src='+SortingMarket[i].imgurl+' width="100%" height="100%"></div>';
+                tempString += '<div class="near_market_name">'+SortingMarket[i].marketName+'</div></div>';
+                // tempString += '<div class="distance">2.2km</div></div>';
+            } // for
+            // console.log(tempString);
+            near_market.innerHTML = "";
+            near_market.innerHTML = tempString;
+            near_market_click_event();
+        } // nearCounting()
+
+        // ajax 통신 테스팅
+        function getNearMarket() {
+            $.ajax({
+                url: "/searching/near",
+                dataType: 'json',
+                type: 'POST',
+                contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                // data: params,
+                success: function (result) {
+                    console.log(result);
+                    if (result.rows.length > 0) {
+                        nearCounting(result.rows); // nearCounting 함수로 결과 배열들 전달
+                    } else {
+                        console.log('검색어를 확인해 주세요.');
+                    }
+                },
+                error: function (e) {
+                    console.log('검색어를 확인해 주세요.');
+                    console.log('process error : ', e);
+                }
+            }); // ajax
+        } // getNearMarket
+
+        // 동적으로 생성된 near_market의 클릭 펑션
+        // 태그가 생성된 뒤에 클릭 이벤트가 추가되어야 한다
+        function near_market_click_event() {
+
+            $('.near_market_list').click(function (event) {
+                console.log($(this).text());
+                var temp = $(this).text();
+
+                $.ajax({
+                    url: "/searching/gooname",
+                    dataType: 'json',
+                    type: 'POST',
+                    contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                    data: {
+                        "filed": 'name',
+                        "search_value": $(this).text()
+                    },
+                    success: function (result) {
+                        if (result.rows.length > 0) {
+                            
+                            document.getElementById('navControlButton').style.display = "none";
+                            document.getElementById('aaa').style.display = "none";
+                            document.getElementById('text_logo').style.display = "none";
+                            document.getElementById('back_div_near').style.display = "block";
+                            document.getElementById('market_infor').style.display = "block";
+                            $('article').css('display','none');
+
+                            for(var i = 0; i < parseInt(result.rows.length); i++){
+                                if(temp == result.rows[i].name){
+                                    window.scrollTo(0, 0);
+                                    marketInfoLi_event(result.rows[i])
+                                    break;
+                                } // inner if
+                            } // for                            
+                        } else {
+                            console.log("시장이름 존재하지 않음");
+                        }
+                    },
+                    error: function (e) {
+                        alert("main.ejs");
+                        console.log('뜨면 안되는 process error : ', e);
+                    }
+                }); // ajax
+            }); // click event
+        }
+        $('#back_div_near').click(function () {
+                document.getElementById('navControlButton').style.display = "table";
+                document.getElementById('aaa').style.display = "block";
+                document.getElementById('text_logo').style.display = "block";
+                document.getElementById('back_div_near').style.display = "none";
+                document.getElementById('market_infor').style.display = "none";
+                document.getElementById('store_infor').style.display = "none";
+            })
+
+        $('#user_nearMarket').click(function (event) {
+            start_nearMarket_setting();
+        });
+        $('.swiper1').click(function () {
+                location.href = '/myStamp';
+            });
+        function start_nearMarket_setting(argument) {
+            window.seoulApp.SignUpgetGPS();
+            getNearMarket();
+        }
+
+        start_nearMarket_setting();
+
+    </script>
+</body>
+
+</html>

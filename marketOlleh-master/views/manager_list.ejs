@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <title><%= title %></title>
+</head>
+<style>
+#applicant_name_area{
+  width: 21%;
+  display: inline-block;
+  border: groove;
+  vertical-align: top;
+  background-color: yellow;
+}
+.list_name{
+  cursor : pointer;
+}
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script type='application/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.js'></script>
+<script>
+    window.addEventListener('load', function () {
+        FastClick.attach(document.body);
+    }, false);
+</script>
+<body>
+
+  <!-- adad데이터베이스에서 값을 불러옵니다. 해당 내용은 밑에 언급이 되어있으므로 자세한 얘기는 생략하겠습니다. -->
+
+  <div id='applicant_name_area'>
+    <% for(var i=0; i<results.length;i++){ %>
+      <div class='list_name'>
+        <div class="market_name"><%= results[i].market_name %></div>
+        <div class="sijang_name"><%= results[i].sijang_name %></div>
+      </div>
+      <% } %>
+
+
+      <script>
+
+      $('.list_name').click(function(){
+        var index = $(this).index();
+        var market=document.getElementsByClassName('market_name')[index];
+        var market_name =market.innerHTML;
+        var sijang=document.getElementsByClassName('sijang_name')[index];
+        var sijang_name =sijang.innerHTML;
+        var data = {
+          'market_name' : market_name,
+          'sijang_name' : sijang_name
+        }
+        console.log(data);
+        $.ajax({
+          type: 'post',
+          url: '/managerlistnextpage',
+          contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+          cache: false,
+          data: data,
+          datatype: 'json',
+          success: function(result) {
+            if (result['result']=='success'){
+              // console.log(result);
+              alert(market_name);
+              $(window).attr('location', '/store_infor');
+            }
+            else{
+              console.log(result);
+              alert('실패1');
+            }
+          },
+          error: function(error){
+            alert('실패2');
+            location.reload();
+          }
+        });
+      });
+      </script>
+    </body>
+    </html>
